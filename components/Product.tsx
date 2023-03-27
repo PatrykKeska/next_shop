@@ -1,4 +1,5 @@
 import Image from "next/legacy/image";
+import ReactMarkdown from "react-markdown";
 
 export const ProductDetails = ({
   id,
@@ -6,6 +7,7 @@ export const ProductDetails = ({
   image,
   price,
   title,
+  longDescription,
 }: ProductDetails) => {
   return (
     <div
@@ -23,6 +25,9 @@ export const ProductDetails = ({
       <h2>{title}</h2>
       <p>{price}</p>
       <p>{description}</p>
+      <article className="prose p-4">
+        <ReactMarkdown>{longDescription}</ReactMarkdown>
+      </article>
     </div>
   );
 };
