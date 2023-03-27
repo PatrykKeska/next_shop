@@ -31,10 +31,15 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (paths: StaticPaths) => {
-  console.log(paths.params.index);
+  const { index } = paths.params;
+  let offset = 0;
+  if (Number(index) > 1) {
+    offset = Number(index) * 10;
+  }
   const res = await fetch(
-    `https://naszsklep-api.vercel.app/api/products?take=25&offset${paths.params.index}}`
+    `https://naszsklep-api.vercel.app/api/products?take=25&offset=${offset}`
   );
+
   const products: StoreApiResponse[] = await res.json();
 
   return {

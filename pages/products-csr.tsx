@@ -3,41 +3,41 @@ import { ProductDetails } from "@/components/Product";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-
 const getProducts = async (page: number) => {
   let offset = page * 3;
-  if(page === 1){
-offset = 0
+  if (page === 1) {
+    offset = 0;
   }
 
-  
   const res = await fetch(
     `https://naszsklep-api.vercel.app/api/products?take=25&offset${offset}}`
   );
+
   const products: StoreApiResponse[] = await res.json();
+  console.log(products);
+
   return products;
-  };
+};
 
 const ProductsPageCsr = () => {
-  const [page, setPage] = useState(1)
-  
-  
+  const [page, setPage] = useState(1);
+
   const query = useQuery({
     queryKey: ["products", page],
     queryFn: () => getProducts(page),
-    keepPreviousData: true
+    keepPreviousData: true,
   });
   const { data, isLoading, isError, isFetching } = query;
 
   if (isLoading && isFetching) {
     return <p>Loading...</p>;
   }
-  if(isError) return <p>something went wrong</p>
-  if(!data) return <p>Please try one more time</p>
+  if (isError) return <p>something went wrong</p>;
+  if (!data) return <p>Please try one more time</p>;
 
   return (
     <section className="p-5">
-      <Pagination setPage={setPage}/>
+      <Pagination setPage={setPage} />
       <ul className="md:grid-cols-3 lg:grid-cols-4 grid gap-5">
         {query.data.map(
           ({
