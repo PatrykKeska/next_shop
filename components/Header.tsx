@@ -12,6 +12,12 @@ export const Header = () => {
       <Link className={router.asPath == "/about" ? "active" : ""} href="/about">
         About
       </Link>
+      <Link
+        className={router.asPath == "/about" ? "active" : ""}
+        href="/products/page/1"
+      >
+        Products
+      </Link>
     </nav>
   );
 };
