@@ -1,3 +1,4 @@
+import { Layout } from "@/components/Layout";
 import { PaginationSSG } from "@/components/PaginationSSG";
 import { ProductListItem } from "@/components/ProductListItem";
 import { InferGetStaticPropsType } from "next";
