@@ -1,3 +1,4 @@
+import { NextSeo } from "next-seo";
 import Image from "next/legacy/image";
 import ReactMarkdown from "react-markdown";
 
@@ -15,6 +16,26 @@ export const ProductDetails = ({
       key={id}
     >
       <div>
+        <NextSeo
+          title={title}
+          description={description}
+          canonical={`https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`}
+          openGraph={{
+            url: `https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`,
+            title: title,
+            description: description,
+            images: [
+              {
+                url: image,
+                width: 800,
+                height: 600,
+                alt: title,
+                type: "image/jpeg",
+              },
+            ],
+            siteName: "Next Sklep",
+          }}
+        />
         <Image
           src={image}
           alt={title}
