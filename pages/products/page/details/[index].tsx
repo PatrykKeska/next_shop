@@ -21,7 +21,7 @@ const ProductIdPage = ({
 
   return (
     <>
-      <div className="h-screen flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-10">
         <ProductDetails
           longDescription={longDescription}
           category={category}
