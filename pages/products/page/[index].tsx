@@ -1,33 +1,42 @@
-import { Layout } from "@/components/Layout";
 import { PaginationSSG } from "@/components/PaginationSSG";
 import { ProductListItem } from "@/components/ProductListItem";
 import { InferGetStaticPropsType } from "next";
+import { useRouter } from "next/router";
 
 const ProductsPage = ({
   products,
+  totalPages,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  return (
-    <>
-      <PaginationSSG />
-      <ul className="md:grid-cols-2 lg:grid-cols-3 grid gap-5">
-        {products.map(({ id, title, image }) => (
-          <li key={id} className="shadow-lg px-10">
-            <ProductListItem data={{ image, title, id }} />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+  const router = useRouter();
+  const currPage = router.query.index;
+  if (currPage) {
+    return (
+      <>
+        <PaginationSSG currentPage={currPage} totalPages={totalPages} />
+        <ul className="md:grid-cols-2 lg:grid-cols-3 grid gap-5">
+          {products.map(({ id, title, image }) => (
+            <li key={id} className="shadow-lg px-10">
+              <ProductListItem data={{ image, title, id }} />
+            </li>
+          ))}
+        </ul>
+      </>
+    );
+  }
 };
-
 export default ProductsPage;
 
 export const getStaticPaths = async () => {
+  const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
+  const page: StoreApiResponse[] = await res.json();
+
+  const arr = Array.from(Array(11).keys());
+
   return {
-    paths: PaginationPages.map((Page) => {
-      return { params: { index: Page.id.toString() } };
+    paths: arr.map((element) => {
+      return { params: { index: element.toString() } };
     }),
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
@@ -46,7 +55,9 @@ export const getStaticProps = async (paths: StaticPaths) => {
   return {
     props: {
       products,
+      totalPages: 160,
     },
+    revalidate: 10,
   };
 };
 
@@ -69,16 +80,3 @@ interface StaticPaths {
     index: string;
   };
 }
-
-const PaginationPages = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-  { id: 6 },
-  { id: 7 },
-  { id: 8 },
-  { id: 9 },
-  { id: 10 },
-];
