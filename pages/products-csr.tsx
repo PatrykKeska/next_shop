@@ -38,7 +38,7 @@ const ProductsPageCsr = () => {
   return (
     <section className="p-5">
       <Pagination setPage={setPage} />
-      <ul className="md:grid-cols-3 lg:grid-cols-4 grid gap-5">
+      <ul className="md:grid-cols-1 lg:grid-cols-2 grid gap-3">
         {query.data.map(
           ({
             description,
