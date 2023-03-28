@@ -1,7 +1,7 @@
 import { Pagination } from "@/components/Pagination";
 import { ProductDetails } from "@/components/Product";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const getProducts = async (page: number) => {
   let offset = page * 3;
@@ -20,7 +20,6 @@ const getProducts = async (page: number) => {
 
 const ProductsPageCsr = () => {
   const [page, setPage] = useState(1);
-  const [products, setProducts] = useState([] as StoreApiResponse[]);
 
   const query = useQuery({
     queryKey: ["products", page],

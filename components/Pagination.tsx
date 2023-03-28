@@ -35,13 +35,28 @@ const navLinks = [
   {
     id: 10,
   },
+  {
+    id: 11,
+  },
+  {
+    id: 12,
+  },
+  {
+    id: 13,
+  },
+  {
+    id: 14,
+  },
+  {
+    id: 15,
+  },
 ];
 
 export const Pagination = ({ setPage }: PaginationProps) => {
   return (
     <>
       <nav className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0 mb-5">
-        <div className="hidden md:-mt-px md:flex">
+        <div className="md:-mt-px md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.id}
