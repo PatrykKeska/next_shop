@@ -14,20 +14,19 @@ export const ProductDetails = ({
       className="max-w-5xl shadow-lg px-10 w-full flex flex-col align-center justify-center"
       key={id}
     >
-      <Image
-        src={image}
-        alt={title}
-        width={16}
-        height={9}
-        layout="responsive"
-        objectFit="contain"
-      />
+      <div>
+        <Image
+          src={image}
+          alt={title}
+          width={16}
+          height={9}
+          layout="responsive"
+          objectFit="contain"
+        />
+      </div>
       <h2>{title}</h2>
       <p>{price}</p>
       <p>{description}</p>
-      <article className="prose p-4">
-        <ReactMarkdown>{longDescription}</ReactMarkdown>
-      </article>
     </div>
   );
 };
