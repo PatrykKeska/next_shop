@@ -16,13 +16,7 @@ export const Header = () => {
         className={router.asPath == "/about" ? "active" : ""}
         href="/products/page/1"
       >
-        Products-SSG
-      </Link>
-      <Link
-        className={router.asPath == "/about" ? "active" : ""}
-        href="/products-csr/"
-      >
-        Products-CSR
+        Products
       </Link>
     </nav>
   );
