@@ -48,6 +48,9 @@ export const ProductDetails = ({
       <h2>{title}</h2>
       <p>{price}</p>
       <p>{description}</p>
+      <article className="prose">
+        <ReactMarkdown>{longDescription}</ReactMarkdown>
+      </article>
     </div>
   );
 };
