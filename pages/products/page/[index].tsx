@@ -13,7 +13,7 @@ const ProductsPage = ({
     return (
       <>
         <PaginationSSG currentPage={currPage} totalPages={totalPages} />
-        <ul className="md:grid-cols-2 lg:grid-cols-3 grid gap-5">
+        <ul className="md:grid-cols-2 lg:grid-cols-3 grid gap-5 pt-10">
           {products.map(({ id, title, image }) => (
             <li key={id} className="shadow-lg px-10">
               <ProductListItem data={{ image, title, id }} />

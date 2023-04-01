@@ -1,5 +1,7 @@
+import { NextSeo } from "next-seo";
 import Image from "next/legacy/image";
-import ReactMarkdown from "react-markdown";
+import { MarkdownReact } from "./MarkdownReact";
+import { MarkdownResult } from "@/utils/types/MarkdownResult";
 
 export const ProductDetails = ({
   id,
@@ -8,6 +10,7 @@ export const ProductDetails = ({
   price,
   title,
   longDescription,
+  source,
 }: ProductDetails) => {
   return (
     <div
@@ -15,6 +18,26 @@ export const ProductDetails = ({
       key={id}
     >
       <div>
+        <NextSeo
+          title={title}
+          description={description}
+          canonical={`https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`}
+          openGraph={{
+            url: `https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`,
+            title: title,
+            description: description,
+            images: [
+              {
+                url: image,
+                width: 800,
+                height: 600,
+                alt: title,
+                type: "image/jpeg",
+              },
+            ],
+            siteName: "Next Sklep",
+          }}
+        />
         <Image
           src={image}
           alt={title}
@@ -27,6 +50,9 @@ export const ProductDetails = ({
       <h2>{title}</h2>
       <p>{price}</p>
       <p>{description}</p>
+      <article className="prose">
+        {source && <MarkdownReact>{source}</MarkdownReact>}
+      </article>
     </div>
   );
 };
@@ -43,4 +69,5 @@ interface ProductDetails {
   };
   image: string;
   longDescription: string;
+  source?: MarkdownResult;
 }
