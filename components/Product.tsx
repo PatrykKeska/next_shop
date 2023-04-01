@@ -50,7 +50,7 @@ export const ProductDetails = ({
       <p>{price}</p>
       <p>{description}</p>
       <article className="prose">
-        <MarkdownReact children={longDescription} />
+        <MarkdownReact>{longDescription}</MarkdownReact>
       </article>
     </div>
   );
