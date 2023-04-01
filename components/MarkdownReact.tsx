@@ -13,6 +13,6 @@ export const MarkdownReact = ({ children }: { children: MarkdownResult }) => {
           return <Link href={href} />;
         },
       }}
-    ></MDXRemote>
+    />
   );
 };
