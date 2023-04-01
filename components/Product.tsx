@@ -1,6 +1,7 @@
 import { NextSeo } from "next-seo";
 import Image from "next/legacy/image";
-import ReactMarkdown from "react-markdown";
+import { MarkdownReact } from "./MarkdownReact";
+import { MarkdownResult } from "@/utils/types/MarkdownResult";
 
 export const ProductDetails = ({
   id,
@@ -49,7 +50,7 @@ export const ProductDetails = ({
       <p>{price}</p>
       <p>{description}</p>
       <article className="prose">
-        <ReactMarkdown>{longDescription}</ReactMarkdown>
+        <MarkdownReact children={longDescription} />
       </article>
     </div>
   );
@@ -66,5 +67,5 @@ interface ProductDetails {
     count: number;
   };
   image: string;
-  longDescription: string;
+  longDescription: MarkdownResult;
 }
