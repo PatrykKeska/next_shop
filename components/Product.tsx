@@ -10,6 +10,7 @@ export const ProductDetails = ({
   price,
   title,
   longDescription,
+  source,
 }: ProductDetails) => {
   return (
     <div
@@ -50,7 +51,7 @@ export const ProductDetails = ({
       <p>{price}</p>
       <p>{description}</p>
       <article className="prose">
-        <MarkdownReact>{longDescription}</MarkdownReact>
+        {source && <MarkdownReact>{source}</MarkdownReact>}
       </article>
     </div>
   );
@@ -67,5 +68,6 @@ interface ProductDetails {
     count: number;
   };
   image: string;
-  longDescription: MarkdownResult;
+  longDescription: string;
+  source?: MarkdownResult;
 }

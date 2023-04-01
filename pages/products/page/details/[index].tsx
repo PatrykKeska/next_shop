@@ -2,8 +2,7 @@ import { ProductDetails } from "@/components/Product";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { API } from "@/utils/Api";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { log } from "console";
+import { MarkdownResult } from "@/utils/types/MarkdownResult";
 
 const ProductIdPage = ({
   product,
@@ -20,6 +19,7 @@ const ProductIdPage = ({
     longDescription,
     category,
     rating,
+    source,
   } = product;
 
   return (
@@ -35,6 +35,7 @@ const ProductIdPage = ({
           price={price}
           title={title}
           key={id}
+          source={source}
         />
       </div>
     </>
@@ -56,7 +57,8 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (paths: StaticPaths) => {
-  const res = await fetch(`${API}/${paths.params.index}`);
+  const { index } = paths.params;
+  const res = await fetch(`${API}/${index}`);
   const product: StoreApiResponse = await res.json();
   if (!product) {
     return {
@@ -64,11 +66,12 @@ export const getStaticProps = async (paths: StaticPaths) => {
       notFound: true,
     };
   }
+
   return {
     props: {
       product: {
         ...product,
-        longDescription: await serialize(product.longDescription),
+        source: await serialize(product.longDescription),
       },
     },
   };
@@ -86,6 +89,7 @@ interface StoreApiResponse {
   };
   image: string;
   longDescription: string;
+  source?: MarkdownResult;
 }
 
 interface StaticPaths {
