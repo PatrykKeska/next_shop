@@ -19,7 +19,6 @@ const ProductIdPage = ({
     longDescription,
     category,
     rating,
-    source,
   } = product;
 
   return (
@@ -35,7 +34,6 @@ const ProductIdPage = ({
           price={price}
           title={title}
           key={id}
-          source={source}
         />
       </div>
     </>
@@ -69,9 +67,10 @@ export const getStaticProps = async (paths: StaticPaths) => {
 
   return {
     props: {
+      revalidate: 5,
       product: {
         ...product,
-        source: await serialize(product.longDescription),
+        longDescription: await serialize(product.longDescription),
       },
     },
   };
