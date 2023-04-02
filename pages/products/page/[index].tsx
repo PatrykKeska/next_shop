@@ -57,7 +57,7 @@ export const getStaticProps = async (paths: StaticPaths) => {
       products,
       totalPages: 160,
     },
-    revalidate: 10,
+    revalidate: 5,
   };
 };
 
