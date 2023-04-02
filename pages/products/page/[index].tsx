@@ -44,7 +44,7 @@ export const getStaticProps = async (paths: StaticPaths) => {
   const { index } = paths.params;
   let offset = 0;
   if (Number(index) > 1) {
-    offset = Number(index) * 10;
+    offset = Number(index) * 25;
   }
   const res = await fetch(
     `https://naszsklep-api.vercel.app/api/products?take=25&offset=${offset}`
