@@ -1,7 +1,8 @@
 import { NextSeo } from "next-seo";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { MarkdownReact } from "./MarkdownReact";
 import { MarkdownResult } from "@/utils/types/MarkdownResult";
+import { imageSizes } from "@/utils/ImageSizes";
 
 export const ProductDetails = ({
   id,
@@ -13,10 +14,10 @@ export const ProductDetails = ({
 }: ProductDetails) => {
   return (
     <div
-      className="max-w-5xl shadow-lg px-10 w-full flex flex-col align-center justify-center"
+      className="flex flex-col justify-center items-center max-w-7xl bg-white shadow-lg px-10 w-full gap-10 "
       key={id}
     >
-      <div>
+      <div className="bg-white relative h-96 w-full p-5">
         <NextSeo
           title={title}
           description={description}
@@ -37,15 +38,17 @@ export const ProductDetails = ({
             siteName: "Next Sklep",
           }}
         />
+
         <Image
           src={image}
           alt={title}
-          width={16}
-          height={9}
-          layout="responsive"
-          objectFit="contain"
+          priority
+          fill
+          style={{ objectFit: "contain" }}
+          sizes={imageSizes}
         />
       </div>
+
       <h2>{title}</h2>
       <p>{price}</p>
       <p>{description}</p>
