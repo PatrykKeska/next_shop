@@ -4,14 +4,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import SEO from "../next-seo.config";
+import { CartStateProvider } from "@/components/Cart/CartContext";
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (
-    <Layout>
-      <DefaultSeo {...SEO} />
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
-    </Layout>
+    <CartStateProvider>
+      <Layout>
+        <DefaultSeo {...SEO} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </Layout>
+    </CartStateProvider>
   );
 }
