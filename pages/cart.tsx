@@ -6,18 +6,17 @@ export const CartContent = () => {
   return (
     <div className='col-span-2'>
       <ul className='divide-y divide-gray-400'>
-        {cartContext.items.map((item, index) => (
-          <li
-            className='py-3 flex justify-between'
-            key={`${item.title}_${index}}`}
-          >
-            <p>{item.title}</p>
+        {cartContext.items.map((item) => (
+          <li className='py-3 flex justify-between' key={item.id}>
+            <p>
+              {item.title} {item.count}
+            </p>
             <div className='flex gap-2'>
               <p>
                 {item.price}
                 <span className='text-green-600 font-bold text-lg'>$</span>
               </p>
-              <RemoveItemButon />
+              <RemoveItemButon id={item.id} />
             </div>
           </li>
         ))}
