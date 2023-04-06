@@ -1,6 +1,16 @@
-export const RemoveItemButon = () => {
+import { useCartState } from "./CartContext";
+
+interface RemoveItemButonProps {
+  id: string;
+}
+
+export const RemoveItemButon = ({ id }: RemoveItemButonProps) => {
+  const { removeItemFromCart } = useCartState();
   return (
-    <button className=' flex hover:text-red-500 transition p--1 '>
+    <button
+      onClick={() => removeItemFromCart(id)}
+      className=' flex hover:text-red-500 transition p--1 '
+    >
       <svg
         xmlns='http://www.w3.org/2000/svg'
         fill='none'
