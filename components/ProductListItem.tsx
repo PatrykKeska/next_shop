@@ -30,7 +30,7 @@ export const ProductListItem = ({ data }: ProductListProps) => {
     <>
       <Link href={`details/${id}`}>
         <>
-          <div className="h-56 relative">
+          <div className='h-56 relative'>
             <Image
               priority
               fill
@@ -42,11 +42,11 @@ export const ProductListItem = ({ data }: ProductListProps) => {
           </div>
         </>
         <h2>{title}</h2>
-        <h3 className="text-center">{price}$</h3>
+        <h3 className='text-center'>{price}$</h3>
       </Link>
       <button
-        onClick={() => addItemToCart({ title, price })}
-        className="inline-block rounded bg-gray-700 px-8 py-3 text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-indigo-500"
+        onClick={() => addItemToCart({ title, price, count: 1, id })}
+        className='inline-block rounded bg-gray-700 px-8 py-3 text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-indigo-500'
       >
         Add
       </button>
