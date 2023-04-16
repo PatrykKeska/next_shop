@@ -9,7 +9,7 @@ export const CartContent = () => {
         {cartContext.items.map((item) => (
           <li className='py-3 flex justify-between' key={item.id}>
             <p>
-              {item.title} {item.count}
+              {item.name} {item.count}
             </p>
             <div className='flex gap-2'>
               <p>
