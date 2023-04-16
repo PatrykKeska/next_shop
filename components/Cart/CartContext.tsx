@@ -1,8 +1,15 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { getItemsFromLocalStorage, setItemToLocalStorage } from "./CartModel";
 
-interface CartItem {
+export interface CartItem {
   readonly price: number;
-  readonly title: string;
+  readonly name: string;
   readonly count: number;
   readonly id: string;
 }
@@ -15,9 +22,21 @@ interface CartState {
 }
 
 export const cartStateContext = createContext<CartState | null>(null);
-
 export const CartStateProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoaded, setLoading] = useState(true);
+
+  useEffect(() => {
+    setCartItems(getItemsFromLocalStorage());
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      setLoading(false);
+      return;
+    }
+    setItemToLocalStorage(cartItems);
+  }, [cartItems, isLoaded]);
 
   return (
     <cartStateContext.Provider
