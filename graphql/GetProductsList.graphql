@@ -1,0 +1,11 @@
+query GetProducts {
+  products {
+    id
+    price
+    name
+    slug
+    images(first: 1) {
+      url
+    }
+  }
+}

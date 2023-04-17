@@ -7,31 +7,28 @@ import { imageSizes } from "@/utils/ImageSizes";
 export const ProductDetails = ({
   id,
   description,
-  image,
+  images,
   price,
-  title,
-  longDescription,
+  name,
 }: ProductDetails) => {
   return (
     <div
-      className="flex flex-col justify-center items-center max-w-7xl bg-white shadow-lg px-10 w-full gap-10 "
+      className='flex flex-col justify-center items-center max-w-7xl bg-white shadow-lg px-10 w-full gap-10 '
       key={id}
     >
-      <div className="bg-white relative h-96 w-full p-5">
+      <div className='bg-white relative h-96 w-full p-5'>
         <NextSeo
-          title={title}
-          description={description}
+          title={name}
           canonical={`https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`}
           openGraph={{
             url: `https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`,
-            title: title,
-            description: description,
+            title: name,
             images: [
               {
-                url: image,
+                url: images[0].url,
                 width: 800,
                 height: 600,
-                alt: title,
+                alt: name,
                 type: "image/jpeg",
               },
             ],
@@ -40,8 +37,8 @@ export const ProductDetails = ({
         />
 
         <Image
-          src={image}
-          alt={title}
+          src={images[0].url}
+          alt={name}
           priority
           fill
           style={{ objectFit: "contain" }}
@@ -49,26 +46,24 @@ export const ProductDetails = ({
         />
       </div>
 
-      <h2>{title}</h2>
-      <p>{price}</p>
-      <p>{description}</p>
-      <article className="prose">
-        {<MarkdownReact>{longDescription}</MarkdownReact>}
+      <h2>{name}</h2>
+      <p>{price / 100}$</p>
+      <article className='prose'>
+        {<MarkdownReact>{description}</MarkdownReact>}
       </article>
     </div>
   );
 };
 
-interface ProductDetails {
+export interface ProductDetails {
+  slug: string;
   id: string;
-  title: string;
+  name: string;
   price: number;
-  description: string;
-  category: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-  image: string;
-  longDescription: MarkdownResult;
+  description: MarkdownResult;
+  images: Image[];
+}
+
+export interface Image {
+  url: string;
 }
