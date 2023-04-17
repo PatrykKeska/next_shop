@@ -1,6 +1,6 @@
 import { ProductListItem } from "@/components/ProductListItem";
 import { apolloClient } from "@/graphql/apolloClient";
-import { gql } from "@apollo/client";
+import { GetProductsDocument, GetProductsQuery } from "@/src/gql/graphql";
 import { InferGetStaticPropsType } from "next";
 
 const ProductsPage = ({
@@ -26,41 +26,12 @@ const ProductsPage = ({
 export default ProductsPage;
 
 export const getStaticProps = async () => {
-  const { data } = await apolloClient.query<StoreApiGraphQL>({
-    query: gql`
-      query GetProducts {
-        products {
-          id
-          price
-          name
-          slug
-          images(first: 1) {
-            url
-          }
-        }
-      }
-    `,
+  const { data } = await apolloClient.query<GetProductsQuery>({
+    query: GetProductsDocument,
   });
   return {
     props: {
       data,
     },
-    // revalidate: 5,
   };
 };
-
-export interface StoreApiGraphQL {
-  products: ProductsApiGraphQL[];
-}
-
-export interface ProductsApiGraphQL {
-  id: string;
-  name: string;
-  price: number;
-  slug: string;
-  images: Image[];
-}
-
-export interface Image {
-  url: string;
-}

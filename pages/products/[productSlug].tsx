@@ -1,11 +1,17 @@
 import { ProductDetails } from "@/components/Product";
-import { InferGetStaticPropsType } from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { apolloClient } from "@/graphql/apolloClient";
-import { gql } from "@apollo/client";
-import { MarkdownResult } from "@/utils/types/MarkdownResult";
 
-const ProductIdPage = ({ product }: GetProductDetailsBySlug) => {
+import {
+  GetProductDetailsBySlugDocument,
+  GetProductsSlugsDocument,
+  GetProductsSlugsQuery,
+} from "@/src/gql/graphql";
+import { GetProductDetailsBySlugQuery } from "@/src/gql/graphql";
+import { ParsedUrlQuery } from "querystring";
+
+const ProductIdPage = ({ product }: any) => {
   if (!product) {
     return <p>Something went wrong...</p>;
   }
@@ -31,14 +37,8 @@ const ProductIdPage = ({ product }: GetProductDetailsBySlug) => {
 export default ProductIdPage;
 
 export const getStaticPaths = async () => {
-  const { data } = await apolloClient.query<GetProductsSlugsResponse>({
-    query: gql`
-      query GetProductsSlugs {
-        products {
-          slug
-        }
-      }
-    `,
+  const { data } = await apolloClient.query<GetProductsSlugsQuery>({
+    query: GetProductsSlugsDocument,
   });
 
   return {
@@ -49,29 +49,16 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (props: Path) => {
-  const { productSlug } = props.params;
-  const { data } = await apolloClient.query<GetProductDetailsBySlug>({
+export const getStaticProps: GetStaticProps = async (props) => {
+  const { productSlug } = props.params as IParams;
+  const { data } = await apolloClient.query<GetProductDetailsBySlugQuery>({
     variables: {
       slug: productSlug,
     },
-    query: gql`
-      query GetProductDetailsBySlug($slug: String) {
-        product(where: { slug: $slug }) {
-          slug
-          id
-          name
-          price
-          description
-          images {
-            url
-          }
-        }
-      }
-    `,
+    query: GetProductDetailsBySlugDocument,
   });
 
-  if (!data) {
+  if (!data || !data.product) {
     return {
       props: {},
       notFound: true,
@@ -82,39 +69,13 @@ export const getStaticProps = async (props: Path) => {
     props: {
       product: {
         ...data.product,
-        longDescription: await serialize(data.product.description),
+        // description: await serialize(data.product.description),
+        description: await serialize(data.product?.description),
       },
     },
   };
 };
 
-interface GetProductsSlugsResponse {
-  products: ProductSlug[];
-}
-
-interface ProductSlug {
-  slug: string;
-}
-
-interface Path {
-  params: {
-    productSlug: string;
-  };
-}
-
-export interface GetProductDetailsBySlug {
-  product: Product;
-}
-
-export interface Product {
-  slug: string;
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  images: Image[];
-}
-
-export interface Image {
-  url: string;
+interface IParams extends ParsedUrlQuery {
+  productSlug: string;
 }

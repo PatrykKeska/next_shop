@@ -8,7 +8,6 @@ export const ProductDetails = ({
   id,
   description,
   images,
-  slug,
   price,
   name,
 }: ProductDetails) => {
@@ -50,8 +49,7 @@ export const ProductDetails = ({
       <h2>{name}</h2>
       <p>{price / 100}$</p>
       <article className='prose'>
-        <p>{description}</p>
-        {/* {<MarkdownReact>{description}</MarkdownReact>} */}
+        {<MarkdownReact>{description}</MarkdownReact>}
       </article>
     </div>
   );
@@ -62,7 +60,7 @@ export interface ProductDetails {
   id: string;
   name: string;
   price: number;
-  description: string;
+  description: MarkdownResult;
   images: Image[];
 }
 
