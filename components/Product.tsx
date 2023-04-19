@@ -16,7 +16,7 @@ export const ProductDetails = ({
       className='flex flex-col justify-center items-center max-w-7xl bg-white shadow-lg px-10 w-full gap-10 '
       key={id}
     >
-      <div className='bg-white relative h-96 w-full p-5'>
+      <div className=' bg-white relative h-96 w-full p-5'>
         <NextSeo
           title={name}
           canonical={`https://next-shop-git-products-patrykkeska.vercel.app/products/page/details/${id}`}
