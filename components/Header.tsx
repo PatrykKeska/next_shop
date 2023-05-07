@@ -17,11 +17,12 @@ export const Header = () => {
           About
         </Link>
         <Link
-          className={router.asPath == "/about" ? "active" : ""}
-          href='/products/'
+            className={router.asPath == "/about" ? "active" : ""}
+            href='/products/'
         >
           Products
         </Link>
+
       </ul>
       <CartBar />
     </nav>

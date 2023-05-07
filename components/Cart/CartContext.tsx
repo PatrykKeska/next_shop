@@ -12,6 +12,7 @@ export interface CartItem {
   readonly name: string;
   readonly count: number;
   readonly id: string;
+  readonly image: string;
 }
 
 interface CartState {
@@ -50,21 +51,21 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
             if (!exisitingItem) {
               return [...prevState, item];
             }
-            return prevState.map((exisitingItem) => {
-              if (exisitingItem.id === item.id) {
+            return prevState.map((existingItem) => {
+              if (existingItem.id === item.id) {
                 return {
-                  ...exisitingItem,
-                  count: exisitingItem.count + 1,
+                  ...existingItem,
+                  count: existingItem.count + 1,
                 };
               }
-              return exisitingItem;
+              return existingItem;
             });
           });
         },
         removeItemFromCart: (id) => {
           setCartItems((prevState) => {
-            const exisitingItem = prevState.find((item) => item.id === id);
-            if (exisitingItem && exisitingItem?.count <= 1) {
+            const exsistingItem = prevState.find((item) => item.id === id);
+            if (exsistingItem && exsistingItem?.count <= 1) {
               return prevState.filter((item) => item.id !== id);
             }
             return prevState.map((item) => {

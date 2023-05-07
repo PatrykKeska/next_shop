@@ -15,7 +15,7 @@ interface ProductDetails {
 
 export const ProductListItem = ({ data }: ProductDetails) => {
   const { id, name, price, slug, images } = data;
-
+console.log(images[0].url);
   const { addItemToCart } = useCartState();
 
   return (
@@ -37,7 +37,7 @@ export const ProductListItem = ({ data }: ProductDetails) => {
         <h3 className='text-center'>{price / 100}$</h3>
       </Link>
       <button
-        onClick={() => addItemToCart({ name, price, count: 1, id })}
+        onClick={() => addItemToCart({ name, price, count: 1, id, image: images[0].url })}
         className='inline-block rounded bg-gray-700 px-8 py-3 text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-indigo-500'
       >
         Add
