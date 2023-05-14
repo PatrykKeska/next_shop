@@ -59,26 +59,29 @@ export const CheckoutForm = ({
               size: "6",
             }}
           />
-          <FormInput
-            useForm={{
-              formState: formState,
-              register,
-              name: "nameOnCard",
-              type: "text",
-              labelName: "Name on Card",
-              size: "3",
-            }}
-          />
-          <FormInput
-            useForm={{
-              formState: formState,
-              register,
-              name: "cardNumber",
-              type: "text",
-              labelName: "Card Number",
-              size: "3",
-            }}
-          />
+          <div className='grid col-span-6 grid-cols-2 gap-2'>
+            <FormInput
+              useForm={{
+                formState: formState,
+                register,
+                name: "nameOnCard",
+                type: "text",
+                labelName: "Name on Card",
+                size: "1",
+              }}
+            />
+
+            <FormInput
+              useForm={{
+                formState: formState,
+                register,
+                name: "cardNumber",
+                type: "text",
+                labelName: "Card Number",
+                size: "3",
+              }}
+            />
+          </div>
           <div className='grid col-span-6 grid-cols-3 gap-1'>
             <FormInput
               useForm={{
@@ -91,6 +94,7 @@ export const CheckoutForm = ({
                 size: "2",
               }}
             />
+
             <FormInput
               useForm={{
                 formState: formState,
@@ -102,6 +106,7 @@ export const CheckoutForm = ({
                 size: "2",
               }}
             />
+
             <FormInput
               useForm={{
                 formState: formState,
