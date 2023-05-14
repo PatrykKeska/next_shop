@@ -22,6 +22,7 @@ interface CartState {
   totalItems: number;
   addItemToCart: (item: CartItem) => void;
   removeItemFromCart: (id: CartItem["id"]) => void;
+  countEachItemQuantity: (id: string) => number;
 }
 
 export const cartStateContext = createContext<CartState | null>(null);
@@ -41,6 +42,14 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     const eachItemCounts = cartItems.map((item) => item.count);
     const totalItems = eachItemCounts.reduce((a, b) => a + b, 0);
     setTotalItems(totalItems);
+  };
+
+  const countEachItemQuantity = (id: string) => {
+    const eachItemQuantity = cartItems
+      .filter((item) => item.id === id)
+      .map((item) => item.count);
+    const totalItems = eachItemQuantity.reduce((a, b) => a + b, 0);
+    return totalItems;
   };
 
   useEffect(() => {
@@ -63,6 +72,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
         items: cartItems,
         totalPrice: totalPrice,
         totalItems: totalItems,
+        countEachItemQuantity,
         addItemToCart: (item) => {
           setCartItems((prevState) => {
             const exisitingItem = prevState.find(
