@@ -1,6 +1,7 @@
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -22,6 +23,7 @@ interface CartState {
   totalItems: number;
   addItemToCart: (item: CartItem) => void;
   removeItemFromCart: (id: CartItem["id"]) => void;
+  countEachItemQuantity: (id: string) => number;
 }
 
 export const cartStateContext = createContext<CartState | null>(null);
@@ -31,17 +33,28 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
-  const countTotalPrice = () => {
+  const countTotalPrice = useCallback(() => {
     const itemsPerCount = cartItems.map((item) => item.price * item.count);
     const totalPrice = itemsPerCount.reduce((a, b) => a + b, 0);
     setTotalPrice(totalPrice / 100);
-  };
+  }, [cartItems]);
 
-  const countTotalItems = () => {
+  const countTotalItems = useCallback(() => {
     const eachItemCounts = cartItems.map((item) => item.count);
     const totalItems = eachItemCounts.reduce((a, b) => a + b, 0);
     setTotalItems(totalItems);
-  };
+  }, [cartItems]);
+
+  const countEachItemQuantity = useCallback(
+    (id: string) => {
+      const eachItemQuantity = cartItems
+        .filter((item) => item.id === id)
+        .map((item) => item.count);
+      const totalItems = eachItemQuantity.reduce((a, b) => a + b, 0);
+      return totalItems;
+    },
+    [cartItems]
+  );
 
   useEffect(() => {
     setCartItems(getItemsFromLocalStorage());
@@ -55,7 +68,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     setItemToLocalStorage(cartItems);
     countTotalPrice();
     countTotalItems();
-  }, [cartItems, isLoaded]);
+  }, [cartItems, isLoaded, countTotalItems, countTotalPrice]);
 
   return (
     <cartStateContext.Provider
@@ -63,6 +76,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
         items: cartItems,
         totalPrice: totalPrice,
         totalItems: totalItems,
+        countEachItemQuantity,
         addItemToCart: (item) => {
           setCartItems((prevState) => {
             const exisitingItem = prevState.find(
