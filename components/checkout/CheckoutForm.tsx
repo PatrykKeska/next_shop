@@ -17,26 +17,28 @@ export const CheckoutForm = ({
     <div className='bg-white py-12 md:py-24'>
       <div className='mx-auto max-w-lg px-4 lg:px-8'>
         <form onSubmit={submit} className='grid grid-cols-6 gap-4'>
-          <FormInput
-            useForm={{
-              formState: formState,
-              register,
-              name: "firstName",
-              type: "text",
-              labelName: "First Name",
-              size: "3",
-            }}
-          />
-          <FormInput
-            useForm={{
-              formState: formState,
-              register,
-              name: "lastName",
-              type: "text",
-              labelName: "Last Name",
-              size: "3",
-            }}
-          />
+          <div className='grid grid-cols-2 col-span-6 gap-2'>
+            <FormInput
+              useForm={{
+                formState: formState,
+                register,
+                name: "firstName",
+                type: "text",
+                labelName: "First Name",
+                size: "1",
+              }}
+            />
+            <FormInput
+              useForm={{
+                formState: formState,
+                register,
+                name: "lastName",
+                type: "text",
+                labelName: "Last Name",
+                size: "1",
+              }}
+            />
+          </div>
           <FormInput
             useForm={{
               formState: formState,

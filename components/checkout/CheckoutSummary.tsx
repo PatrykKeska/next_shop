@@ -25,11 +25,11 @@ export const CheckoutSummary = () => {
 
         <div>
           <div className='flow-root'>
-            {items.map(({ name, image, price, id }) => {
-              const SameItems = countEachItemQuantity(id);
-              const SameItemsTotalPrice = (SameItems * price) / 100;
-              return (
-                <ul className='-my-4 divide-y divide-gray-100'>
+            <ul className='-my-4 divide-y divide-gray-100'>
+              {items.map(({ name, image, price, id }) => {
+                const SameItems = countEachItemQuantity(id);
+                const SameItemsTotalPrice = (SameItems * price) / 100;
+                return (
                   <li key={id} className='flex items-center gap-4 py-4'>
                     <Image alt={name} src={image} width={75} height={75} />
 
@@ -62,9 +62,9 @@ export const CheckoutSummary = () => {
                       </dl>
                     </div>
                   </li>
-                </ul>
-              );
-            })}
+                );
+              })}
+            </ul>
           </div>
         </div>
       </div>
