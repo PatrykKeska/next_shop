@@ -3,13 +3,13 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { apolloClient } from "@/graphql/apolloClient";
 
+import { ParsedUrlQuery } from "querystring";
 import {
   GetProductDetailsBySlugDocument,
+  GetProductDetailsBySlugQuery,
   GetProductsSlugsDocument,
   GetProductsSlugsQuery,
-} from "@/src/gql/graphql";
-import { GetProductDetailsBySlugQuery } from "@/src/gql/graphql";
-import { ParsedUrlQuery } from "querystring";
+} from "@/graphql/generated/graphql";
 
 const ProductIdPage = ({ product }: any) => {
   if (!product) {

@@ -1,6 +1,9 @@
 import { ProductListItem } from "@/components/ProductListItem";
 import { apolloClient } from "@/graphql/apolloClient";
-import { GetProductsDocument, GetProductsQuery } from "@/src/gql/graphql";
+import {
+  GetProductsDocument,
+  GetProductsQuery,
+} from "@/graphql/generated/graphql";
 import { InferGetStaticPropsType } from "next";
 
 const ProductsPage = ({
