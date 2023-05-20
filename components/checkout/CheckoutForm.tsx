@@ -1,11 +1,11 @@
 import { FormState, UseFormRegister } from "react-hook-form";
-import { FormData } from "@/utils/checkoutValidationForm";
+import { CheckoutFormSchemaType } from "@/utils/checkoutValidationForm";
 import { FormInput } from "./FormInput";
 
 interface CheckoutFormProps {
   submit: () => void;
-  register: UseFormRegister<FormData>;
-  formState: FormState<FormData>;
+  register: UseFormRegister<CheckoutFormSchemaType>;
+  formState: FormState<CheckoutFormSchemaType>;
 }
 
 export const CheckoutForm = ({

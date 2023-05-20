@@ -1,27 +1,13 @@
 import * as React from "react";
 import { FormState, UseFormRegister } from "react-hook-form";
-import { FormData } from "@/utils/checkoutValidationForm";
+import { CheckoutFormSchemaType } from "@/utils/checkoutValidationForm";
 
 interface FormInputProps {
   useForm: {
-    register: UseFormRegister<FormData>;
-    formState: FormState<FormData>;
+    register: UseFormRegister<CheckoutFormSchemaType>;
+    formState: FormState<CheckoutFormSchemaType>;
     palceholder?: string;
-    name:
-      | "firstName"
-      | "lastName"
-      | "cardNumber"
-      | "emailAddress"
-      | "phone"
-      | "expirationYear"
-      | "expirationMonth"
-      | "cvc"
-      | "cardNumber"
-      | "nameOnCard"
-      | "city"
-      | "street"
-      | "apartmentNumber"
-      | "postalCode";
+    name: keyof CheckoutFormSchemaType;
     type:
       | "text"
       | "number | password"

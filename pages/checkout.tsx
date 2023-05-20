@@ -1,16 +1,15 @@
-import { useCartState } from "@/components/Cart/CartContext";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { checkoutFormSchema } from "@/utils/checkoutValidationForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { FormData } from "@/utils/checkoutValidationForm";
+import { CheckoutFormSchemaType } from "@/utils/checkoutValidationForm";
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 
 const CheckoutPage = () => {
-  const { totalPrice } = useCartState();
-  const { register, setValue, handleSubmit, formState } = useForm<FormData>({
-    resolver: yupResolver(checkoutFormSchema),
-  });
+  const { register, setValue, handleSubmit, formState } =
+    useForm<CheckoutFormSchemaType>({
+      resolver: yupResolver(checkoutFormSchema),
+    });
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
