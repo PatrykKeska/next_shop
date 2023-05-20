@@ -1,5 +1,9 @@
 import { ProductDetails } from "@/components/Product";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import {
+  GetStaticProps,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+} from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { apolloClient } from "@/graphql/apolloClient";
 
@@ -10,8 +14,21 @@ import {
   GetProductsSlugsDocument,
   GetProductsSlugsQuery,
 } from "@/graphql/generated/graphql";
+import { useForm } from "react-hook-form";
+import { ReviewFormSchemaType } from "@/components/CreateReview/reviewValidation";
+import { ReviewForm } from "@/components/CreateReview/ReviewForm";
+import { ReviewLayout } from "@/components/CreateReview/ReviewLayout";
 
-const ProductIdPage = ({ product }: any) => {
+const ProductIdPage = ({
+  product,
+}: InferGetServerSidePropsType<typeof getStaticProps>) => {
+  const { register, setValue, handleSubmit, formState } =
+    useForm<ReviewFormSchemaType>();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
+
   if (!product) {
     return <p>Something went wrong...</p>;
   }
@@ -30,6 +47,7 @@ const ProductIdPage = ({ product }: any) => {
           key={id}
         />
       </div>
+      <ReviewLayout />
     </>
   );
 };
@@ -69,7 +87,6 @@ export const getStaticProps: GetStaticProps = async (props) => {
     props: {
       product: {
         ...data.product,
-        // description: await serialize(data.product.description),
         description: await serialize(data.product?.description),
       },
     },
