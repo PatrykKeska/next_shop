@@ -58,4 +58,4 @@ export const checkoutFormSchema = yup
     nameOnCard: yup.string().required("Please enter the name on your card"),
   })
   .required();
-export type FormData = yup.InferType<typeof checkoutFormSchema>;
+export type CheckoutFormSchemaType = yup.InferType<typeof checkoutFormSchema>;
