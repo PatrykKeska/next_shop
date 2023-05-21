@@ -8,10 +8,18 @@ import { useCreateProductReviewMutation } from "@/graphql/generated/graphql";
 import { useRouter } from "next/router";
 import { ConfirmationModal } from "../Modals/ConfirmationModal";
 import { Transition } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useModalsState } from "../Modals/ModalsContext";
+import { LoadingModal } from "../Modals/LoadingModal";
 
 export const ReviewForm = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const {
+    isConfirmationVisible,
+    setIsConfirmationVisible,
+    setIsLoadingVisible,
+    isLoadingVisible,
+    setConfirmationMessage,
+  } = useModalsState();
   const [createReview, { data: dataResponse, loading, error }] =
     useCreateProductReviewMutation();
   const {
@@ -19,8 +27,8 @@ export const ReviewForm = () => {
   } = useRouter();
 
   const slug = productSlug as string;
-  console.log(dataResponse);
-  const { register, setValue, handleSubmit, watch, formState } =
+
+  const { register, setValue, handleSubmit, reset, formState } =
     useForm<ReviewFormSchemaType>({ resolver: yupResolver(reviewFormSchema) });
   const addReview = async (data: ReviewFormSchemaType, slug: any) => {
     createReview({
@@ -36,18 +44,43 @@ export const ReviewForm = () => {
       },
     });
   };
-  const handleModal = (arg: boolean) => {
-    setIsModalVisible(arg);
-  };
-  const onSubmit = handleSubmit(async (data) => {
-    addReview(data, "unisex-long-sleeve-tee");
 
-    dataResponse && handleModal(true);
+  const onSubmit = handleSubmit(async (data) => {
+    await addReview(data, slug);
+    setIsLoadingVisible(true);
   });
+
+  useEffect(() => {
+    if (!loading) {
+      setIsLoadingVisible(false);
+    }
+    if (error) {
+      setConfirmationMessage({
+        error: true,
+        title: "Something went wrong",
+        content: "Please try again later",
+      });
+    }
+    if (dataResponse) {
+      setConfirmationMessage({
+        error: false,
+        title: "Your review has been submitted",
+        content:
+          "Thank you for your feedback. It will soon be visible on the website.",
+      });
+      setIsConfirmationVisible(true);
+      reset();
+    }
+
+    return () => {
+      setIsConfirmationVisible(false);
+      setIsLoadingVisible(false);
+    };
+  }, [dataResponse]);
   return (
     <>
       <Transition
-        show={isModalVisible}
+        show={isConfirmationVisible}
         enter='transition-opacity duration-300'
         enterFrom='opacity-0'
         enterTo='opacity-100'
@@ -55,10 +88,19 @@ export const ReviewForm = () => {
         leaveFrom='opacity-100'
         leaveTo='opacity-0'
       >
-        <ConfirmationModal
-          isModalVisible={isModalVisible}
-          handler={handleModal}
-        />
+        <ConfirmationModal />
+      </Transition>
+
+      <Transition
+        show={isLoadingVisible}
+        enter='transition-opacity duration-300'
+        enterFrom='opacity-0'
+        enterTo='opacity-100'
+        leave='transition-opacity duration-300'
+        leaveFrom='opacity-100'
+        leaveTo='opacity-0'
+      >
+        <LoadingModal />
       </Transition>
 
       <section className='bg-gray-100 p-10'>

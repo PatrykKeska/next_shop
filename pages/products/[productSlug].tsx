@@ -1,9 +1,5 @@
 import { ProductDetails } from "@/components/Product";
-import {
-  GetStaticProps,
-  InferGetServerSidePropsType,
-  InferGetStaticPropsType,
-} from "next";
+import { GetStaticProps, InferGetServerSidePropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { apolloClient } from "@/graphql/apolloClient";
 
