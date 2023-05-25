@@ -30,7 +30,7 @@ export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
                 height={400}
               />
             </div>
-            {/* //write own component for this when images are available  */}
+
             <ul className='mt-1 flex gap-1'>
               <li>
                 <img
