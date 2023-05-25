@@ -2,7 +2,6 @@ import { ProductDetails } from "@/components/Product";
 import { GetStaticProps, InferGetServerSidePropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { apolloClient } from "@/graphql/apolloClient";
-
 import { ParsedUrlQuery } from "querystring";
 import {
   GetProductDetailsBySlugDocument,
@@ -12,8 +11,6 @@ import {
 } from "@/graphql/generated/graphql";
 import { useForm } from "react-hook-form";
 import { ReviewFormSchemaType } from "@/components/CreateReview/reviewValidation";
-import { ReviewForm } from "@/components/CreateReview/ReviewForm";
-import { ReviewLayout } from "@/components/CreateReview/ReviewLayout";
 
 const ProductIdPage = ({
   product,
@@ -21,29 +18,17 @@ const ProductIdPage = ({
   const { register, setValue, handleSubmit, formState } =
     useForm<ReviewFormSchemaType>();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-  });
+  const onSubmit = handleSubmit((data) => {});
 
   if (!product) {
     return <p>Something went wrong...</p>;
   }
-  const { description, id, images, price, name, slug } = product;
 
   return (
     <>
       <div className='flex flex-col items-center justify-center p-10'>
-        <ProductDetails
-          slug={slug}
-          description={description}
-          id={id}
-          images={images}
-          price={price}
-          name={name}
-          key={id}
-        />
+        <ProductDetails product={product} />
       </div>
-      <ReviewLayout />
     </>
   );
 };

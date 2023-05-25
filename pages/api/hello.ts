@@ -1,13 +1,38 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiHandler } from "next";
 
-type Data = {
-  name: string
-}
+const handler: NextApiHandler = async (req, res) => {
+  const email = req.body.email;
+  if (typeof email !== "string") {
+    return res.status(400).json({ error: "Invalid email" });
+  }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
-}
+  if (!process.env.MAILERLITE_API_KEY || !process.env.MAILERLITE_GROUP_ID) {
+    return res.status(500).json({ error: "Unauthenticated request !" });
+  }
+
+  const options = {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "X-MailerLite-ApiDocs": "true",
+      "content-type": "application/json",
+      "X-MailerLite-ApiKey": process.env.MAILERLITE_API_KEY,
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  };
+
+  const mailerliteResponse = await fetch(
+    `https://api.mailerlite.com/api/v2/groups/${process.env.MAILERLITE_GROUP_ID}/subscribers`,
+    options
+  );
+
+  if (!mailerliteResponse.ok) {
+    return res.status(400).json({ error: "Something went wrong" });
+  }
+
+  return res.status(201).json({ message: "Success" });
+};
+
+export default handler;

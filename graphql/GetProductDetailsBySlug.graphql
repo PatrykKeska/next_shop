@@ -1,12 +1,27 @@
 query GetProductDetailsBySlug($slug: String) {
   product(where: { slug: $slug }) {
-    slug
-    id
     name
+    slug
     price
     description
     images {
       url
+    }
+    variants {
+      ... on ProductSizeColorVariant {
+        id
+        name
+        size
+        color
+      }
+    }
+    reviews(orderBy: publishedAt_ASC) {
+      id
+      content
+      headline
+      name
+      rating
+      createdAt
     }
   }
 }

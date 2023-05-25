@@ -3,11 +3,11 @@ import { ReviewForm } from "./ReviewForm";
 import { Transition } from "@headlessui/react";
 import { AllReviews } from "./AllReviews";
 import { ReviewButton } from "./ReviewButton";
+import { Review } from "@/graphql/generated/graphql";
 
 export const ReviewLayout = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isReviewsVisible, setIsReviewsVisible] = useState(true);
-
   const renderReviewForm = () => {
     setIsFormVisible(!isFormVisible);
     setIsReviewsVisible(false);

@@ -1,21 +1,12 @@
 import clsx from "clsx";
-import { clear } from "console";
 import { useEffect, useState } from "react";
 import { useModalsState } from "./ModalsContext";
 
 export const LoadingModal = () => {
-  const { isLoadingVisible, setIsLoadingVisible } = useModalsState();
+  const { isLoadingVisible } = useModalsState();
   const [progress, setProgress] = useState(0);
 
-  const handleClose = () => {
-    console.log("click");
-    setIsLoadingVisible(false);
-    setProgress(0);
-    document.body.style.overflow = "auto";
-  };
-
   useEffect(() => {
-    document.body.style.overflow = "hidden";
     const timer = setInterval(() => {
       if (progress < 100) {
         setProgress((prev) => prev + 1);
@@ -33,11 +24,7 @@ export const LoadingModal = () => {
     <>
       {isLoadingVisible && (
         <>
-          <section
-            onClick={handleClose}
-            className='w-full top-0 absolute h-[150vh] bg-zinc-700/50'
-          ></section>
-          <div className='sm:w-72 md:w-96 text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <div className='bg-zinc-500/80 rounded-xl h-40 w-full max-w-md p-10 flex flex-col justify-end sm:w-72 md:w-96 text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
             <span className='block rounded-full bg-gray-200'>
               <span
                 style={{ width: `${progress}%` }}
@@ -46,7 +33,7 @@ export const LoadingModal = () => {
                 )}
               ></span>
             </span>
-            <p className='text-blue-500 animate-bounce p-10 text-2xl'>
+            <p className='text-white  animate-bounce p-2 text-2xl'>
               Loading...
             </p>
           </div>

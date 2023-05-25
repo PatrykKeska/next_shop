@@ -8,7 +8,7 @@ import { useCreateProductReviewMutation } from "@/graphql/generated/graphql";
 import { useRouter } from "next/router";
 import { ConfirmationModal } from "../Modals/ConfirmationModal";
 import { Transition } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useModalsState } from "../Modals/ModalsContext";
 import { LoadingModal } from "../Modals/LoadingModal";
 
@@ -76,40 +76,42 @@ export const ReviewForm = () => {
       setIsConfirmationVisible(false);
       setIsLoadingVisible(false);
     };
-  }, [dataResponse]);
+  }, [dataResponse, loading, error]);
   return (
     <>
-      <Transition
-        show={isConfirmationVisible}
-        enter='transition-opacity duration-300'
-        enterFrom='opacity-0'
-        enterTo='opacity-100'
-        leave='transition-opacity duration-300'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
-      >
-        <ConfirmationModal />
-      </Transition>
-
-      <Transition
-        show={isLoadingVisible}
-        enter='transition-opacity duration-300'
-        enterFrom='opacity-0'
-        enterTo='opacity-100'
-        leave='transition-opacity duration-300'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
-      >
-        <LoadingModal />
-      </Transition>
-
-      <section className='bg-gray-100 p-10'>
+      <section className='bg-gray-100 relative'>
         <h2 className='text-2xl font-semibold mb-4'>Create a review</h2>
         <div className='mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8'>
           <div className='grid  grid-cols-1 gap-y-8 lg:grid-cols-5'>
+            <>
+              <Transition
+                show={isConfirmationVisible}
+                enter='transition-opacity duration-300'
+                enterFrom='opacity-0'
+                enterTo='opacity-100'
+                leave='transition-opacity duration-300'
+                leaveFrom='opacity-100'
+                leaveTo='opacity-0'
+              >
+                <ConfirmationModal />
+              </Transition>
+
+              <Transition
+                show={isLoadingVisible}
+                enter='transition-opacity duration-300'
+                enterFrom='opacity-0'
+                enterTo='opacity-100'
+                leave='transition-opacity duration-300'
+                leaveFrom='opacity-100'
+                leaveTo='opacity-0'
+              >
+                <LoadingModal />
+              </Transition>
+            </>
+            <LoadingModal />
             <form
               onSubmit={onSubmit}
-              className='grid lg:col-start-2 lg:col-end-5 gap-y-4'
+              className=' grid lg:col-start-2 lg:col-end-5 gap-y-4'
             >
               <ReviewInput
                 register={register}

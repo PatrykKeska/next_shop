@@ -2,18 +2,16 @@ import { MarkdownResult } from "@/utils/types/MarkdownResult";
 import Image from "next/image";
 import { useCartState } from "./Cart/CartContext";
 import { MarkdownReact } from "./MarkdownReact";
+import { GetProductDetailsBySlugQuery } from "@/graphql/generated/graphql";
+import { ReviewLayout } from "./CreateReview/ReviewLayout";
 
-export const ProductDetails = ({
-  id,
-  description,
-  images,
-  price,
-  name,
-}: ProductDetails) => {
+export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
   const { addItemToCart } = useCartState();
+  if (!product) return null;
+  const { slug, description, name, images, price, variants, reviews } = product;
   return (
     <section>
-      <div key={id} className='relative mx-auto max-w-screen-xl px-4 py-8'>
+      <div key={slug} className='relative mx-auto max-w-screen-xl px-4 py-8'>
         <div>
           <h1 className='text-2xl font-bold lg:text-3xl'>{name}</h1>
 
@@ -188,7 +186,7 @@ export const ProductDetails = ({
                 type='button'
                 onClick={() =>
                   addItemToCart({
-                    id,
+                    id: slug,
                     name,
                     price,
                     count: 1,
@@ -216,19 +214,7 @@ export const ProductDetails = ({
           </div>
         </div>
       </div>
+      <ReviewLayout />
     </section>
   );
 };
-
-export interface ProductDetails {
-  slug: string;
-  id: string;
-  name: string;
-  price: number;
-  description: MarkdownResult;
-  images: Image[];
-}
-
-export interface Image {
-  url: string;
-}

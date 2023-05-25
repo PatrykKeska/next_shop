@@ -1,3 +1,5 @@
+import { Review } from "@/graphql/generated/graphql";
+
 export const AllReviews = () => {
   return (
     <section>
