@@ -1,9 +1,15 @@
 import { MarkdownResult } from "@/utils/types/MarkdownResult";
 import { MDXRemote } from "next-mdx-remote";
-import Image from "next/image";
 import Link from "next/link";
 
-export const MarkdownReact = ({ children }: { children: MarkdownResult }) => {
+export const MarkdownReact = ({
+  children,
+}: {
+  children: string | MarkdownResult;
+}) => {
+  if (typeof children === "string") {
+    return <p>{children}</p>;
+  }
   return (
     <MDXRemote
       {...children}
