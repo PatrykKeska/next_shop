@@ -61,7 +61,15 @@ export const NewsLetterForm = () => {
       setIsConfirmationVisible(false);
       setIsLoadingVisible(false);
     };
-  }, [isLoading, isError, isSuccess]);
+  }, [
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+    setConfirmationMessage,
+    setIsLoadingVisible,
+    setIsConfirmationVisible,
+  ]);
 
   return (
     <div>
