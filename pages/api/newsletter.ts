@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
       "X-MailerLite-ApiKey": process.env.MAILERLITE_API_KEY,
     },
     body: JSON.stringify({
-      email: email,
+      email,
     }),
   };
 
