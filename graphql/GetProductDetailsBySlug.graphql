@@ -15,13 +15,5 @@ query GetProductDetailsBySlug($slug: String) {
         color
       }
     }
-    reviews(orderBy: publishedAt_ASC) {
-      id
-      content
-      headline
-      name
-      rating
-      createdAt
-    }
   }
 }
