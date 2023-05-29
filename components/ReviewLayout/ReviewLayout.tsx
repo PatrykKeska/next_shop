@@ -1,21 +1,24 @@
 import { useState } from "react";
-import { ReviewForm } from "./ReviewForm";
+import { ReviewForm } from "./CreateReview/ReviewForm";
 import { Transition } from "@headlessui/react";
-import { AllReviews } from "./AllReviews";
-import { ReviewButton } from "./ReviewButton";
-import { Review } from "@/graphql/generated/graphql";
+import { AllReviews } from "./AllReviews/AllReviews";
+import { ReviewButton } from "./CreateReview/ReviewButton";
 
-export const ReviewLayout = () => {
+interface ReviewLayoutProps {
+  slug: string;
+}
+export const ReviewLayout = ({ slug }: ReviewLayoutProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isReviewsVisible, setIsReviewsVisible] = useState(true);
-  const renderReviewForm = () => {
-    setIsFormVisible(!isFormVisible);
-    setIsReviewsVisible(false);
-  };
 
-  const renderAllReviews = () => {
-    setIsReviewsVisible(!isReviewsVisible);
-    setIsFormVisible(false);
+  const handleReviewSelection = () => {
+    if (isReviewsVisible) {
+      setIsReviewsVisible(false);
+      setIsFormVisible(true);
+    } else {
+      setIsReviewsVisible(true);
+      setIsFormVisible(false);
+    }
   };
   return (
     <div className='flex flex-col'>
@@ -23,14 +26,8 @@ export const ReviewLayout = () => {
         <ReviewButton
           width='w-72'
           type='button'
-          name={`${isFormVisible ? "Hide review form" : "Leave a review"}`}
-          onClick={renderReviewForm}
-        />
-        <ReviewButton
-          width='w-72'
-          type='button'
-          name={`${isReviewsVisible ? "Hide reviews" : "Check all reviews"}`}
-          onClick={renderAllReviews}
+          name={`${isFormVisible ? "Customer reviews" : "Leave a review"}`}
+          onClick={handleReviewSelection}
         />
       </div>
 
@@ -54,7 +51,7 @@ export const ReviewLayout = () => {
         leaveFrom='opacity-100'
         leaveTo='opacity-0'
       >
-        <AllReviews />
+        <AllReviews slug={slug} />
       </Transition>
     </div>
   );
