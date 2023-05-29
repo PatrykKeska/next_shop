@@ -6,11 +6,11 @@ import { RatingStar } from "./RatingStar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateProductReviewMutation } from "@/graphql/generated/graphql";
 import { useRouter } from "next/router";
-import { ConfirmationModal } from "../Modals/ConfirmationModal";
+import { ConfirmationModal } from "../../Modals/ConfirmationModal";
 import { Transition } from "@headlessui/react";
 import { useEffect } from "react";
-import { useModalsState } from "../Modals/ModalsContext";
-import { LoadingModal } from "../Modals/LoadingModal";
+import { useModalsState } from "../../Modals/ModalsContext";
+import { LoadingModal } from "../../Modals/LoadingModal";
 
 export const ReviewForm = () => {
   const {

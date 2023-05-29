@@ -9,17 +9,10 @@ import {
   GetProductsSlugsDocument,
   GetProductsSlugsQuery,
 } from "@/graphql/generated/graphql";
-import { useForm } from "react-hook-form";
-import { ReviewFormSchemaType } from "@/components/CreateReview/reviewValidation";
 
 const ProductIdPage = ({
   product,
 }: InferGetServerSidePropsType<typeof getStaticProps>) => {
-  const { register, setValue, handleSubmit, formState } =
-    useForm<ReviewFormSchemaType>();
-
-  const onSubmit = handleSubmit((data) => {});
-
   if (!product) {
     return <p>Something went wrong...</p>;
   }

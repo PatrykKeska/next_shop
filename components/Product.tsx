@@ -3,12 +3,12 @@ import Image from "next/image";
 import { useCartState } from "./Cart/CartContext";
 import { MarkdownReact } from "./MarkdownReact";
 import { GetProductDetailsBySlugQuery } from "@/graphql/generated/graphql";
-import { ReviewLayout } from "./CreateReview/ReviewLayout";
+import { ReviewLayout } from "./ReviewLayout/ReviewLayout";
 
 export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
   const { addItemToCart } = useCartState();
   if (!product) return null;
-  const { slug, description, name, images, price, variants, reviews } = product;
+  const { slug, description, name, images, price, variants } = product;
   return (
     <section>
       <div key={slug} className='relative mx-auto max-w-screen-xl px-4 py-8'>
@@ -214,7 +214,7 @@ export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
           </div>
         </div>
       </div>
-      <ReviewLayout />
+      <ReviewLayout slug={slug} />
     </section>
   );
 };

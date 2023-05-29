@@ -58,7 +58,7 @@ export const ProductListItem = ({ data }: ProductDetails) => {
             New
           </span>
 
-          <h3 className='mt-4 text-lg font-medium text-gray-900'>{name}</h3>
+          <h3 className='mt-4 text-md font-medium text-gray-900'>{name}</h3>
 
           <p className='mt-1.5 text-sm text-gray-700'>${price / 100}</p>
         </div>
