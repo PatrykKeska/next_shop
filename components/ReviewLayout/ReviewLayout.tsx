@@ -40,7 +40,7 @@ export const ReviewLayout = ({ slug }: ReviewLayoutProps) => {
         leaveFrom='opacity-100'
         leaveTo='opacity-0'
       >
-        <ReviewForm />
+        <ReviewForm slug={slug} />
       </Transition>
       <Transition
         show={isReviewsVisible}

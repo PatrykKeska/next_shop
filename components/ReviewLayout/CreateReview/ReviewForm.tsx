@@ -4,15 +4,22 @@ import { ReviewInput } from "./ReviewInput";
 import { ReviewButton } from "./ReviewButton";
 import { RatingStar } from "./RatingStar";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCreateProductReviewMutation } from "@/graphql/generated/graphql";
-import { useRouter } from "next/router";
+import {
+  useCreateProductReviewMutation,
+  GetReviewsForProductSlugQuery,
+} from "@/graphql/generated/graphql";
 import { ConfirmationModal } from "../../Modals/ConfirmationModal";
 import { Transition } from "@headlessui/react";
 import { useEffect } from "react";
 import { useModalsState } from "../../Modals/ModalsContext";
 import { LoadingModal } from "../../Modals/LoadingModal";
+import { GetReviewsForProductSlugDocument } from "@/graphql/generated/graphql";
 
-export const ReviewForm = () => {
+interface ReviewFormProps {
+  slug: string;
+}
+
+export const ReviewForm = ({ slug }: ReviewFormProps) => {
   const {
     isConfirmationVisible,
     setIsConfirmationVisible,
@@ -21,16 +28,41 @@ export const ReviewForm = () => {
     setConfirmationMessage,
   } = useModalsState();
   const [createReview, { data: dataResponse, loading, error }] =
-    useCreateProductReviewMutation();
-  const {
-    query: { productSlug },
-  } = useRouter();
+    // useCreateProductReviewMutation({
+    //   refetchQueries: [
+    //     { query: GetReviewsForProductSlugDocument, variables: { slug } },
+    //   ],
+    // });
 
-  const slug = productSlug as string;
+    useCreateProductReviewMutation({
+      update(cache, result) {
+        const originalQuery = cache.readQuery<GetReviewsForProductSlugQuery>({
+          query: GetReviewsForProductSlugDocument,
+          variables: { slug },
+        });
+        if (!originalQuery?.product?.reviews || !result.data?.review) {
+          return;
+        }
+
+        const newReviewsQueries = {
+          ...originalQuery,
+          product: {
+            ...originalQuery.product,
+            reviews: [...originalQuery.product?.reviews, result.data.review],
+          },
+        };
+
+        cache.writeQuery({
+          query: GetReviewsForProductSlugDocument,
+          variables: { slug },
+          data: newReviewsQueries,
+        });
+      },
+    });
 
   const { register, setValue, handleSubmit, reset, formState } =
     useForm<ReviewFormSchemaType>({ resolver: yupResolver(reviewFormSchema) });
-  const addReview = async (data: ReviewFormSchemaType, slug: any) => {
+  const addReview = async (data: ReviewFormSchemaType, slug: string) => {
     createReview({
       variables: {
         review: {
@@ -40,6 +72,15 @@ export const ReviewForm = () => {
           content: data.content,
           rating: data.rating,
           product: { connect: { slug: slug } },
+        },
+      },
+      optimisticResponse: {
+        __typename: "Mutation",
+        review: {
+          __typename: "Review",
+          id: (-Math.random()).toString(),
+          createdAt: new Date().toISOString(),
+          ...data,
         },
       },
     });
