@@ -17,7 +17,7 @@ export interface CartItem {
   readonly image: string;
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[];
   totalPrice: number;
   totalItems: number;
