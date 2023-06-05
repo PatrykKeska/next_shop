@@ -1,11 +1,37 @@
 import { useCartState } from "@/components/Cart/CartContext";
+import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
 export const CartPage = () => {
   const { items, removeItemFromCart, totalPrice } = useCartState();
   const [itemsToRemove, setItemsToRemove] = useState(0);
+
+  const payForItems = async () => {
+    const stripe = await stripePromise;
+    if (!stripe) {
+      return new Error("Stripe is not loaded");
+    }
+    const res = await fetch("/api/checkout", {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify(
+        items.map(({ id, count }) => {
+          return {
+            slug: id,
+            count,
+          };
+        })
+      ),
+    });
+    const { sessionId } = await res.json();
+    await stripe.redirectToCheckout({ sessionId });
+  };
 
   return (
     <section>
@@ -83,21 +109,6 @@ export const CartPage = () => {
             <div className='mt-8 flex justify-end border-t border-gray-100 pt-8'>
               <div className='w-screen max-w-lg space-y-4'>
                 <dl className='space-y-0.5 text-sm text-gray-700'>
-                  <div className='flex justify-between'>
-                    <dt>Subtotal</dt>
-                    <dd>$0</dd>
-                  </div>
-
-                  <div className='flex justify-between'>
-                    <dt>VAT</dt>
-                    <dd>$0</dd>
-                  </div>
-
-                  <div className='flex justify-between'>
-                    <dt>Discount</dt>
-                    <dd>-$0</dd>
-                  </div>
-
                   <div className='flex justify-between !text-base font-medium'>
                     <dt>Total</dt>
                     <dd>${totalPrice}</dd>
@@ -128,12 +139,19 @@ export const CartPage = () => {
                 </div>
 
                 <div className='flex justify-end'>
-                  <Link
+                  {/* <Link
                     href='/checkout'
                     className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
                   >
                     Checkout
-                  </Link>
+                  </Link> */}
+
+                  <button
+                    className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
+                    onClick={payForItems}
+                  >
+                    Checkout
+                  </button>
                 </div>
               </div>
             </div>
