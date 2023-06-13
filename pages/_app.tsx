@@ -7,24 +7,28 @@ import SEO from "../next-seo.config";
 import { CartStateProvider } from "@/components/Cart/CartContext";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "@/graphql/apolloClient";
-import {
-  ModalsStateContext,
-  ModalsStateProvider,
-} from "@/components/Modals/ModalsContext";
-export default function App({ Component, pageProps }: AppProps) {
+import { ModalsStateProvider } from "@/components/Modals/ModalsContext";
+import { SessionProvider } from "next-auth/react";
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   const queryClient = new QueryClient();
+
   return (
-    <ApolloProvider client={apolloClient}>
-      <ModalsStateProvider>
-        <CartStateProvider>
-          <Layout>
-            <DefaultSeo {...SEO} />
-            <QueryClientProvider client={queryClient}>
-              <Component {...pageProps} />
-            </QueryClientProvider>
-          </Layout>
-        </CartStateProvider>
-      </ModalsStateProvider>
-    </ApolloProvider>
+    <SessionProvider session={session}>
+      <ApolloProvider client={apolloClient}>
+        <ModalsStateProvider>
+          <CartStateProvider>
+            <Layout>
+              <DefaultSeo {...SEO} />
+              <QueryClientProvider client={queryClient}>
+                <Component {...pageProps} />
+              </QueryClientProvider>
+            </Layout>
+          </CartStateProvider>
+        </ModalsStateProvider>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }

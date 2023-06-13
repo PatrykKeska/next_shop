@@ -1,8 +1,4 @@
-import {
-  Review,
-  useGetReviewsForProductSlugQuery,
-} from "@/graphql/generated/graphql";
-import { RatingStar } from "../CreateReview/RatingStar";
+import { useGetReviewsForProductSlugQuery } from "@/graphql/generated/graphql";
 import { StarIcon } from "./StarIcon";
 import { CustomerReviewsHeader } from "./CustomerReviewsHeader";
 interface AllReviewsProps {

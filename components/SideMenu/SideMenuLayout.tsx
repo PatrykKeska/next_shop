@@ -1,24 +1,46 @@
 import Link from "next/link";
-import { useEffect } from "react";
 import { SideLink } from "./SideLink";
 import { NewsIcon } from "../assets/icons/NewsIcon";
 import { ContactIcon } from "../assets/icons/ContactIcon";
 import { ProductsIcon } from "../assets/icons/ProductsIcon";
 import { AboutIcon } from "../assets/icons/AboutIcon";
-
+import { LoginIcon } from "../assets/icons/LoginIcon";
+import { LogoutIcon } from "../assets/icons/LogoutIcon";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 interface SideMenuProps {
   isOpen: boolean;
   onClose: (arg: boolean) => void;
 }
 
-export const SideMenuLayout = ({ isOpen, onClose }: SideMenuProps) => {
+export const SideMenuLayout = ({ onClose }: SideMenuProps) => {
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+  });
+  const session = useSession();
+
   useEffect(() => {
-    return () => {
-      // onClose(false);
-    };
-  }, []);
+    console.log(session);
+    if (session.data?.user) {
+      setUserDetails({
+        email: session.data.user.email,
+      });
+    }
+  }, [session]);
+
+  const handleRedirectToLogin = () => {
+    signIn();
+    onClose(false);
+  };
+
+  const handleRedirectToLogout = () => {
+    signOut();
+    onClose(false);
+  };
+
+  // TODO: add user session, icon etc on the bottom
   return (
-    <div className='flex h-screen flex-col justify-between border-e bg-gray-100 lg:hidden max-w-sm w-72 absolute -bottom-13 left-0 z-20'>
+    <div className='flex h-screen flex-col justify-between border-e bg-gray-100  max-w-sm w-72 absolute -bottom-13 left-0 z-20'>
       <div className='px-4 py-6'>
         <nav aria-label='Main Nav' className='mt-6 flex flex-col space-y-1'>
           <SideLink
@@ -129,30 +151,23 @@ export const SideMenuLayout = ({ isOpen, onClose }: SideMenuProps) => {
 
                 <span className='text-sm font-medium'> Security </span>
               </Link>
-
-              <form action='/logout'>
+              {session.status === "authenticated" ? (
                 <button
-                  type='submit'
+                  onClick={handleRedirectToLogout}
                   className='flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-5 w-5 opacity-75'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
-                    />
-                  </svg>
-
-                  <span className='text-sm font-medium'> Logout </span>
+                  <LogoutIcon />
+                  Logout
                 </button>
-              </form>
+              ) : (
+                <button
+                  onClick={handleRedirectToLogin}
+                  className='flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                >
+                  <LoginIcon />
+                  Login
+                </button>
+              )}
             </nav>
           </details>
         </nav>
@@ -171,9 +186,11 @@ export const SideMenuLayout = ({ isOpen, onClose }: SideMenuProps) => {
 
           <div>
             <p className='text-xs'>
-              <strong className='block font-medium'>Eric Frusciante</strong>
+              <strong className='block font-medium'>
+                {/* {userDetails.firstName} {userDetails.lastName} */}
+              </strong>
 
-              <span> eric@frusciante.com </span>
+              <span>{userDetails.email}</span>
             </p>
           </div>
         </Link>
