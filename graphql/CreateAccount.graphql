@@ -1,0 +1,17 @@
+mutation CreateAccount(
+  $email: String!
+  $password: String!
+  $firstName: String!
+  $lastName: String!
+) {
+  createAccount(
+    data: {
+      email: $email
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+    }
+  ) {
+    id
+  }
+}
