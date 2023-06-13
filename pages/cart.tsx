@@ -1,36 +1,42 @@
 import { useCartState } from "@/components/Cart/CartContext";
 import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
-
+import { useRouter } from "next/router";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
 export const CartPage = () => {
-  const { items, removeItemFromCart, totalPrice } = useCartState();
-  const [itemsToRemove, setItemsToRemove] = useState(0);
-
+  const { items, removeItemFromCart, totalPrice, totalItems } = useCartState();
+  const router = useRouter();
+  const session = useSession();
   const payForItems = async () => {
-    const stripe = await stripePromise;
-    if (!stripe) {
-      return new Error("Stripe is not loaded");
+    if (session.status === "authenticated") {
+      const stripe = await stripePromise;
+      if (!stripe) {
+        return new Error("Stripe is not loaded");
+      }
+      const res = await fetch("/api/checkout", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(
+          items.map(({ id, count }) => {
+            return {
+              slug: id,
+              count,
+            };
+          })
+        ),
+      });
+      if (res.status === 401) {
+        router.push("/auth/signin");
+      } else {
+        const { sessionId } = await res.json();
+        await stripe.redirectToCheckout({ sessionId });
+      }
     }
-    const res = await fetch("/api/checkout", {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify(
-        items.map(({ id, count }) => {
-          return {
-            slug: id,
-            count,
-          };
-        })
-      ),
-    });
-    const { sessionId } = await res.json();
-    await stripe.redirectToCheckout({ sessionId });
   };
 
   return (
@@ -139,19 +145,21 @@ export const CartPage = () => {
                 </div>
 
                 <div className='flex justify-end'>
-                  {/* <Link
-                    href='/checkout'
-                    className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
-                  >
-                    Checkout
-                  </Link> */}
-
-                  <button
-                    className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
-                    onClick={payForItems}
-                  >
-                    Checkout
-                  </button>
+                  {session.status === "authenticated" && totalItems > 0 ? (
+                    <button
+                      className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
+                      onClick={payForItems}
+                    >
+                      Checkout
+                    </button>
+                  ) : (
+                    <Link
+                      className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
+                      href='/auth/signin'
+                    >
+                      Signin to checkout
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
