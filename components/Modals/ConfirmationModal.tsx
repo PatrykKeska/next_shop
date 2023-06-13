@@ -2,6 +2,7 @@ import { useModalsState } from "./ModalsContext";
 import clsx from "clsx";
 
 export const ConfirmationModal = () => {
+  //TODO: use this modals https://www.hyperui.dev/components/application-ui/alerts
   const {
     isConfirmationVisible,
     setIsConfirmationVisible,

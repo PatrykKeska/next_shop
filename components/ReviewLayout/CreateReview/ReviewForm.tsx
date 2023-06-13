@@ -18,6 +18,7 @@ import { GetReviewsForProductSlugDocument } from "@/graphql/generated/graphql";
 interface ReviewFormProps {
   slug: string;
 }
+// TODO: secure review for logged in users only
 
 export const ReviewForm = ({ slug }: ReviewFormProps) => {
   const {
