@@ -1,0 +1,12 @@
+query isExmailExist($email: String!) {
+  draftAccount: account(where: { email: $email }, stage: DRAFT) {
+    id
+    email
+    stage
+  }
+  publishedAccount: account(where: { email: $email }, stage: PUBLISHED) {
+    id
+    email
+    stage
+  }
+}
