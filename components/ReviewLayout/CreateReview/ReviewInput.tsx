@@ -1,6 +1,5 @@
+import { ReviewFormSchemaType } from "@/utils/yupValidators/reviewValidator";
 import { FormState, UseFormRegister } from "react-hook-form";
-import { ReviewFormSchemaType } from "./reviewValidation";
-import { text } from "stream/consumers";
 
 interface ReviewInputProps {
   label: string;

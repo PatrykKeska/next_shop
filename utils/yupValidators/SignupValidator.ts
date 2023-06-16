@@ -9,7 +9,8 @@ export const SignupSchema = yup
     password: yup.string().min(6).required("Password is required"),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password")], "Passwords must match"),
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required(),
   })
   .required();
 

@@ -24,7 +24,7 @@ export const LoadingModal = () => {
     <>
       {isLoadingVisible && (
         <>
-          <div className='bg-zinc-500/30 rounded-xl inset-0  p-52 flex flex-col justify-center text-center absolute z-50'>
+          <div className='bg-zinc-500/30 rounded-xl inset-0  p-52 flex flex-col justify-center text-center fixed top1/3 z-50'>
             <span className='block rounded-full bg-gray-200'>
               <span
                 style={{ width: `${progress}%` }}

@@ -16,7 +16,7 @@ export const authOptions = {
         username: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (credentials?.username === undefined) return null;
         const userByEmail = await authorizatedApolloClient.query<
           GetAccountByEmailQuery,

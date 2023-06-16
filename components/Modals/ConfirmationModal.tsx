@@ -24,7 +24,7 @@ export const ConfirmationModal = () => {
           I will fade in and out
           <div
             role='alert'
-            className='rounded-xl border border-gray-100 bg-white p-4 shadow-xl fixed top-1/3 left-1/2 -translate-x-1/2'
+            className='rounded-xl border border-gray-100 bg-white p-4 shadow-xl fixed top-1/3 left-1/2 -translate-x-1/2 z-50'
           >
             <div className='flex items-start gap-4'>
               <span className='text-green-600'>
@@ -89,7 +89,7 @@ export const ConfirmationModal = () => {
       >
         <div
           role='alert'
-          className='rounded border-s-4 border-red-500 bg-red-50 px-4 py-3 pb-6 shadow-xl fixed top-1/4 left-1/2 -translate-x-1/2'
+          className='rounded border-s-4 border-red-500 bg-red-50 px-4 py-3 pb-6 shadow-xl fixed top-1/4 left-1/2 -translate-x-1/2 z-50'
         >
           <div className='flex items-center flex-row-reverse justify-between gap-2 text-red-800'>
             <button

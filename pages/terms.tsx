@@ -1,8 +1,6 @@
-interface TermsPageProps {}
-
-const TermsPage = ({}: TermsPageProps) => {
+const TermsPage = () => {
   return (
-    <section className='flex flex-col bg-gray-200 gap-5 items-start  p-10'>
+    <section className='flex flex-col bg-gray-50 gap-5 items-start  p-10'>
       <h1 className='text-2xl self-center'>
         Terms and Conditions for E-commerce Shop
       </h1>

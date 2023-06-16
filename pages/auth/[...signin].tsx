@@ -1,7 +1,6 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   signupSchema,
@@ -10,13 +9,17 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useModalsState } from "@/components/Modals/ModalsContext";
 import { LoadingModal } from "@/components/Modals/LoadingModal";
+import { ConfirmationModal } from "@/components/Modals/ConfirmationModal";
 const SigninPage = () => {
   const router = useRouter();
-  const [authMessage, setAuthMessage] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<signupSchemaType>({
     resolver: yupResolver(signupSchema),
   });
-  const { setIsLoadingVisible } = useModalsState();
+  const {
+    setIsLoadingVisible,
+    setConfirmationMessage,
+    setIsConfirmationVisible,
+  } = useModalsState();
   const onSubmit = handleSubmit(async (data, e) => {
     setIsLoadingVisible(true);
     if (!e) return;
@@ -28,10 +31,16 @@ const SigninPage = () => {
     });
     if (!isCorrect?.ok) {
       setIsLoadingVisible(false);
-      setAuthMessage("Password or email is incorrect");
+      setConfirmationMessage({
+        title: "Something went wrong",
+        content: "Please try again",
+        error: true,
+      });
+      setIsConfirmationVisible(true);
     }
     if (isCorrect?.ok) {
       setIsLoadingVisible(false);
+      setIsConfirmationVisible(false);
       router.push("/products");
     }
   });
@@ -40,15 +49,13 @@ const SigninPage = () => {
     <>
       <div className='mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8'>
         <div className='mx-auto max-w-lg text-center'>
-          <h1 className='text-2xl font-bold sm:text-3xl'>Get started today!</h1>
+          <h1 className='text-2xl font-bold sm:text-3xl'>Welcome back!</h1>
 
           <p className='mt-4 text-gray-500'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et libero
-            nulla eaque error neque ipsa culpa autem, at itaque nostrum!
+            Log in to your account to continue shopping.
           </p>
           <LoadingModal />
-
-          {authMessage && <p className='text-red-500 text-xl'>{authMessage}</p>}
+          <ConfirmationModal />
         </div>
         <form
           method='post'
