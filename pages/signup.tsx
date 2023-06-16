@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 interface SignupPageProps {}
 
 const SignupPage = ({}: SignupPageProps) => {
-  //TODO: When res ok reset form and let user know about sucess and verify email
   const session = useSession();
   const router = useRouter();
   if (session.status === "authenticated") {

@@ -6,10 +6,11 @@ import {
   SignupFormData,
   SignupSchema,
 } from "@/utils/yupValidators/SignupValidator";
+import { LoadingModal } from "../Modals/LoadingModal";
+import { ConfirmationModal } from "../Modals/ConfirmationModal";
+import { useSignupHook } from "./useSignuphook";
 
-interface SignupFormProps {}
-
-export const SignupForm = ({}: SignupFormProps) => {
+export const SignupForm = () => {
   const {
     register,
     handleSubmit,
@@ -17,15 +18,8 @@ export const SignupForm = ({}: SignupFormProps) => {
   } = useForm<SignupFormData>({
     resolver: yupResolver(SignupSchema),
   });
-  const onSubmit = handleSubmit(async (data) => {
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-  });
+
+  const onSubmit = useSignupHook(handleSubmit);
   return (
     <>
       <form onSubmit={onSubmit} className='mt-8 grid grid-cols-6 gap-6'>
@@ -114,6 +108,8 @@ export const SignupForm = ({}: SignupFormProps) => {
           </p>
         </div>
       </form>
+      <LoadingModal />
+      <ConfirmationModal />
     </>
   );
 };
