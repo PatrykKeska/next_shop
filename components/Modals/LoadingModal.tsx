@@ -24,12 +24,12 @@ export const LoadingModal = () => {
     <>
       {isLoadingVisible && (
         <>
-          <div className='bg-zinc-500/30 rounded-xl inset-0  p-52 flex flex-col justify-center text-center fixed top1/3 z-50'>
-            <span className='block rounded-full bg-gray-200'>
+          <div className='bg-zinc-500/30 rounded-xl inset-0 p-10  lg:p-52 flex flex-col justify-center text-center fixed top1/3 z-50 w-full'>
+            <span className='flex items-center rounded-full bg-gray-200 min-w-[300px]'>
               <span
                 style={{ width: `${progress}%` }}
                 className={clsx(
-                  `w-[10%] block h-3 rounded-full bg-[repeating-linear-gradient(45deg,_var(--tw-gradient-from)_0,_var(--tw-gradient-from)_20px,_var(--tw-gradient-to)_20px,_var(--tw-gradient-to)_40px)] from-indigo-400 to-indigo-500`
+                  `w-[10%] min-w-[30px] block h-3 rounded-full bg-[repeating-linear-gradient(45deg,_var(--tw-gradient-from)_0,_var(--tw-gradient-from)_20px,_var(--tw-gradient-to)_20px,_var(--tw-gradient-to)_40px)] from-indigo-400 to-indigo-500`
                 )}
               ></span>
             </span>
