@@ -7,15 +7,9 @@ import {
   useState,
 } from "react";
 import { getItemsFromLocalStorage, setItemToLocalStorage } from "./CartModel";
-import { count } from "console";
-
-export interface CartItem {
-  readonly price: number;
-  readonly name: string;
-  readonly count: number;
-  readonly id: string;
-  readonly image: string;
-}
+import { useSession } from "next-auth/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { CartItem } from "@/graphql/generated/graphql";
 
 export interface CartState {
   items: CartItem[];
@@ -33,14 +27,51 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
-  const countTotalPrice = useCallback(() => {
-    const itemsPerCount = cartItems.map((item) => item.price * item.count);
-    const totalPrice = itemsPerCount.reduce((a, b) => a + b, 0);
-    setTotalPrice(totalPrice / 100);
+  const session = useSession();
+  const getCartItems = async () => {
+    if (session.data?.user?.email === undefined) return null;
+    const res = await fetch("/api/cart/get-item", {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({
+        email: session.data?.user?.email,
+      }),
+    });
+    const { cartItems } = await res.json();
+    return cartItems.data.cart.cartItems;
+  };
+
+  const query = useQueryClient();
+
+  const { data, isLoading, isError } = useQuery<CartItem[]>({
+    queryKey: ["cartItems"],
+    queryFn: getCartItems,
+    refetchOnMount: "always",
+  });
+
+  useEffect(() => {
+    query.fetchQuery<CartItem[]>({
+      queryKey: ["cartItems"],
+      queryFn: getCartItems,
+    });
+  }, [session]);
+
+  const updateCart = useCallback(async () => {
+    return await getCartItems();
   }, [cartItems]);
 
+  useEffect(() => {});
+  // const countTotalPrice = useCallback(() => {
+  //   const itemsPerCount = cartItems.map((item) => {
+  //     if (!item.product) return 0;
+  //     item.product.price * item.quantity;
+  //     const totalPrice = itemsPerCount.reduce((a, b) => a + b, 0);
+  //     setTotalPrice(totalPrice / 100);
+  //   });
+  // }, [cartItems]);
+
   const countTotalItems = useCallback(() => {
-    const eachItemCounts = cartItems.map((item) => item.count);
+    const eachItemCounts = cartItems.map((item) => item.quantity);
     const totalItems = eachItemCounts.reduce((a, b) => a + b, 0);
     setTotalItems(totalItems);
   }, [cartItems]);
@@ -49,26 +80,32 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     (id: string) => {
       const eachItemQuantity = cartItems
         .filter((item) => item.id === id)
-        .map((item) => item.count);
+        .map((item) => item.quantity);
       const totalItems = eachItemQuantity.reduce((a, b) => a + b, 0);
       return totalItems;
     },
     [cartItems]
   );
 
-  useEffect(() => {
-    setCartItems(getItemsFromLocalStorage());
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await updateCart();
+  //     // setCartItems(res?.cartItems);
+  //   })();
+  // }, []);
 
-  useEffect(() => {
-    if (isLoaded) {
-      setLoading(false);
-      return;
-    }
-    setItemToLocalStorage(cartItems);
-    countTotalPrice();
-    countTotalItems();
-  }, [cartItems, isLoaded, countTotalItems, countTotalPrice]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (isLoaded) {
+  //       setLoading(false);
+  //       return;
+  //     }
+  //     const res = await updateCart();
+  //     setCartItems(res?.cartItems);
+  //     // countTotalPrice();
+  //     // countTotalItems();
+  //   })();
+  // }, [cartItems, isLoaded, countTotalItems]);
 
   return (
     <cartStateContext.Provider
@@ -89,7 +126,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
               if (existingItem.id === item.id) {
                 return {
                   ...existingItem,
-                  count: existingItem.count + 1,
+                  count: existingItem.quantity + 1,
                 };
               }
               return existingItem;
@@ -99,14 +136,14 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
         removeItemFromCart: (id) => {
           setCartItems((prevState) => {
             const exsistingItem = prevState.find((item) => item.id === id);
-            if (exsistingItem && exsistingItem?.count <= 1) {
+            if (exsistingItem && exsistingItem?.quantity <= 1) {
               return prevState.filter((item) => item.id !== id);
             }
             return prevState.map((item) => {
               if (item.id === id) {
                 return {
                   ...item,
-                  count: item.count - 1,
+                  count: item.quantity - 1,
                 };
               }
               return item;
@@ -121,6 +158,21 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useCartState = () => {
+  // const query = useQueryClient();
+
+  // const { data, isLoading, isError } = useQuery<CartItem[]>({
+  //   queryKey: ["cartItems"],
+  //   queryFn: getCartItems,
+  //   refetchOnMount: "always",
+  // });
+
+  // useEffect(() => {
+  //   query.fetchQuery<CartItem[]>({
+  //     queryKey: ["cartItems"],
+  //     queryFn: getCartItems,
+  //   });
+  // }, [session]);
+
   const cartState = useContext(cartStateContext);
   if (!cartState) throw new Error("Your Forgot CartStateProvider");
   return cartState;
