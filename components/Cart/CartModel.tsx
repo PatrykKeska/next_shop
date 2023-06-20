@@ -1,4 +1,4 @@
-import { CartItem } from "./CartContext";
+import { CartItem } from "@/graphql/generated/graphql";
 
 export const getItemsFromLocalStorage = () => {
   const localStorageCart = localStorage.getItem("NextShop_Cart");

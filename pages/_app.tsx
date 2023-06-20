@@ -19,14 +19,14 @@ export default function App({
     <SessionProvider session={session}>
       <ApolloProvider client={apolloClient}>
         <ModalsStateProvider>
-          <CartStateProvider>
-            <Layout>
-              <DefaultSeo {...SEO} />
-              <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <CartStateProvider>
+              <Layout>
+                <DefaultSeo {...SEO} />
                 <Component {...pageProps} />
-              </QueryClientProvider>
-            </Layout>
-          </CartStateProvider>
+              </Layout>
+            </CartStateProvider>
+          </QueryClientProvider>
         </ModalsStateProvider>
       </ApolloProvider>
     </SessionProvider>
