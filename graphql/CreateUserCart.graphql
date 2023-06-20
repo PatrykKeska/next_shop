@@ -1,0 +1,5 @@
+mutation CreateUserCart($email: String!) {
+  createCart(data: { exmail: $email }) {
+    exmail
+  }
+}

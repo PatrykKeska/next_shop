@@ -1,0 +1,7 @@
+mutation PublishCartItem($id: ID!) {
+  publishCartItem(where: { id: $id }) {
+    cart {
+      id
+    }
+  }
+}

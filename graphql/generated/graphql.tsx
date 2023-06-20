@@ -1298,6 +1298,7 @@ export type Cart = Node & {
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
+  totalPrice?: Maybe<Scalars['Int']>;
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -1389,6 +1390,7 @@ export type CartCreateInput = {
   cartItems?: InputMaybe<CartItemCreateManyInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   exmail: Scalars['String'];
+  totalPrice?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -1958,6 +1960,21 @@ export type CartManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  totalPrice?: InputMaybe<Scalars['Int']>;
+  /** All values greater than the given value. */
+  totalPrice_gt?: InputMaybe<Scalars['Int']>;
+  /** All values greater than or equal the given value. */
+  totalPrice_gte?: InputMaybe<Scalars['Int']>;
+  /** All values that are contained in given list. */
+  totalPrice_in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** All values less than the given value. */
+  totalPrice_lt?: InputMaybe<Scalars['Int']>;
+  /** All values less than or equal the given value. */
+  totalPrice_lte?: InputMaybe<Scalars['Int']>;
+  /** Any other value that exists and is not equal to the given value. */
+  totalPrice_not?: InputMaybe<Scalars['Int']>;
+  /** All values that are not contained in given list. */
+  totalPrice_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -1985,6 +2002,8 @@ export enum CartOrderByInput {
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  TotalPriceAsc = 'totalPrice_ASC',
+  TotalPriceDesc = 'totalPrice_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
 }
@@ -1992,6 +2011,7 @@ export enum CartOrderByInput {
 export type CartUpdateInput = {
   cartItems?: InputMaybe<CartItemUpdateManyInlineInput>;
   exmail?: InputMaybe<Scalars['String']>;
+  totalPrice?: InputMaybe<Scalars['Int']>;
 };
 
 export type CartUpdateManyInlineInput = {
@@ -2012,7 +2032,8 @@ export type CartUpdateManyInlineInput = {
 };
 
 export type CartUpdateManyInput = {
-  exmail?: InputMaybe<Scalars['String']>;
+  /** No fields in updateMany data input */
+  _?: InputMaybe<Scalars['String']>;
 };
 
 export type CartUpdateManyWithNestedWhereInput = {
@@ -2153,6 +2174,21 @@ export type CartWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  totalPrice?: InputMaybe<Scalars['Int']>;
+  /** All values greater than the given value. */
+  totalPrice_gt?: InputMaybe<Scalars['Int']>;
+  /** All values greater than or equal the given value. */
+  totalPrice_gte?: InputMaybe<Scalars['Int']>;
+  /** All values that are contained in given list. */
+  totalPrice_in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** All values less than the given value. */
+  totalPrice_lt?: InputMaybe<Scalars['Int']>;
+  /** All values less than or equal the given value. */
+  totalPrice_lte?: InputMaybe<Scalars['Int']>;
+  /** Any other value that exists and is not equal to the given value. */
+  totalPrice_not?: InputMaybe<Scalars['Int']>;
+  /** All values that are not contained in given list. */
+  totalPrice_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -2187,7 +2223,9 @@ export type CartWhereStageInput = {
 
 /** References Cart record uniquely */
 export type CartWhereUniqueInput = {
+  exmail?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  totalPrice?: InputMaybe<Scalars['Int']>;
 };
 
 /** Category of products, e.g. Menswear. */
@@ -13131,6 +13169,13 @@ export enum _SystemDateTimeFieldVariation {
   Localization = 'localization'
 }
 
+export type CreateCartItemMutationVariables = Exact<{
+  data: CartItemCreateInput;
+}>;
+
+
+export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem?: { __typename?: 'CartItem', id: string, quantity: number, cart?: { __typename?: 'Cart', id: string } | null, product?: { __typename?: 'Product', id: string, name: string, slug: string, price: number, images: Array<{ __typename?: 'Asset', url: string }> } | null } | null };
+
 export type CreateAccountMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -13147,6 +13192,13 @@ export type CreateProductReviewMutationVariables = Exact<{
 
 
 export type CreateProductReviewMutation = { __typename?: 'Mutation', review?: { __typename?: 'Review', content: string, headline: string, id: string, name: string, rating?: number | null, createdAt: any } | null };
+
+export type CreateUserCartMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type CreateUserCartMutation = { __typename?: 'Mutation', createCart?: { __typename?: 'Cart', exmail: string } | null };
 
 export type GetAccountByEmailQueryVariables = Exact<{
   email?: InputMaybe<Scalars['String']>;
@@ -13195,6 +13247,35 @@ export type GetReviewsForProductSlugQueryVariables = Exact<{
 
 export type GetReviewsForProductSlugQuery = { __typename?: 'Query', product?: { __typename?: 'Product', reviews: Array<{ __typename?: 'Review', content: string, headline: string, id: string, name: string, rating?: number | null, createdAt: any }> } | null };
 
+export type GetProductsInUserCartQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type GetProductsInUserCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', totalPrice?: number | null, cartItems: Array<{ __typename?: 'CartItem', id: string, quantity: number, product?: { __typename?: 'Product', id: string, name: string, price: number, slug: string, variants: Array<{ __typename?: 'ProductColorVariant' } | { __typename?: 'ProductSizeColorVariant', id: string, name: string, size: ProductSize, color: ProductColor } | { __typename?: 'ProductSizeVariant' }>, images: Array<{ __typename?: 'Asset', url: string }> } | null }> } | null };
+
+export type PublishCartItemMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PublishCartItemMutation = { __typename?: 'Mutation', publishCartItem?: { __typename?: 'CartItem', cart?: { __typename?: 'Cart', id: string } | null } | null };
+
+export type PublishCartMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PublishCartMutation = { __typename?: 'Mutation', publishCart?: { __typename?: 'Cart', id: string } | null };
+
+export type CountCartTotalPriceMutationVariables = Exact<{
+  email: Scalars['String'];
+  value: Scalars['Int'];
+}>;
+
+
+export type CountCartTotalPriceMutation = { __typename?: 'Mutation', updateCart?: { __typename?: 'Cart', totalPrice?: number | null } | null, publishCart?: { __typename?: 'Cart', id: string } | null };
+
 export const ReviewContentFragmentDoc = gql`
     fragment reviewContent on Review {
   content
@@ -13205,6 +13286,52 @@ export const ReviewContentFragmentDoc = gql`
   createdAt
 }
     `;
+export const CreateCartItemDocument = gql`
+    mutation CreateCartItem($data: CartItemCreateInput!) {
+  createCartItem(data: $data) {
+    id
+    quantity
+    cart {
+      id
+    }
+    product {
+      id
+      name
+      slug
+      price
+      images {
+        url
+      }
+    }
+  }
+}
+    `;
+export type CreateCartItemMutationFn = Apollo.MutationFunction<CreateCartItemMutation, CreateCartItemMutationVariables>;
+
+/**
+ * __useCreateCartItemMutation__
+ *
+ * To run a mutation, you first call `useCreateCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCartItemMutation, { data, loading, error }] = useCreateCartItemMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCartItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateCartItemMutation, CreateCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCartItemMutation, CreateCartItemMutationVariables>(CreateCartItemDocument, options);
+      }
+export type CreateCartItemMutationHookResult = ReturnType<typeof useCreateCartItemMutation>;
+export type CreateCartItemMutationResult = Apollo.MutationResult<CreateCartItemMutation>;
+export type CreateCartItemMutationOptions = Apollo.BaseMutationOptions<CreateCartItemMutation, CreateCartItemMutationVariables>;
 export const CreateAccountDocument = gql`
     mutation CreateAccount($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
   createAccount(
@@ -13276,6 +13403,39 @@ export function useCreateProductReviewMutation(baseOptions?: Apollo.MutationHook
 export type CreateProductReviewMutationHookResult = ReturnType<typeof useCreateProductReviewMutation>;
 export type CreateProductReviewMutationResult = Apollo.MutationResult<CreateProductReviewMutation>;
 export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<CreateProductReviewMutation, CreateProductReviewMutationVariables>;
+export const CreateUserCartDocument = gql`
+    mutation CreateUserCart($email: String!) {
+  createCart(data: {exmail: $email}) {
+    exmail
+  }
+}
+    `;
+export type CreateUserCartMutationFn = Apollo.MutationFunction<CreateUserCartMutation, CreateUserCartMutationVariables>;
+
+/**
+ * __useCreateUserCartMutation__
+ *
+ * To run a mutation, you first call `useCreateUserCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserCartMutation, { data, loading, error }] = useCreateUserCartMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCreateUserCartMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserCartMutation, CreateUserCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserCartMutation, CreateUserCartMutationVariables>(CreateUserCartDocument, options);
+      }
+export type CreateUserCartMutationHookResult = ReturnType<typeof useCreateUserCartMutation>;
+export type CreateUserCartMutationResult = Apollo.MutationResult<CreateUserCartMutation>;
+export type CreateUserCartMutationOptions = Apollo.BaseMutationOptions<CreateUserCartMutation, CreateUserCartMutationVariables>;
 export const GetAccountByEmailDocument = gql`
     query GetAccountByEmail($email: String) {
   account(where: {email: $email}) {
@@ -13558,3 +13718,164 @@ export function useGetReviewsForProductSlugLazyQuery(baseOptions?: Apollo.LazyQu
 export type GetReviewsForProductSlugQueryHookResult = ReturnType<typeof useGetReviewsForProductSlugQuery>;
 export type GetReviewsForProductSlugLazyQueryHookResult = ReturnType<typeof useGetReviewsForProductSlugLazyQuery>;
 export type GetReviewsForProductSlugQueryResult = Apollo.QueryResult<GetReviewsForProductSlugQuery, GetReviewsForProductSlugQueryVariables>;
+export const GetProductsInUserCartDocument = gql`
+    query GetProductsInUserCart($email: String!) {
+  cart(where: {exmail: $email}) {
+    totalPrice
+    cartItems {
+      id
+      quantity
+      product {
+        id
+        name
+        price
+        slug
+        variants {
+          ... on ProductSizeColorVariant {
+            id
+            name
+            size
+            color
+          }
+        }
+        images {
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductsInUserCartQuery__
+ *
+ * To run a query within a React component, call `useGetProductsInUserCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductsInUserCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductsInUserCartQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useGetProductsInUserCartQuery(baseOptions: Apollo.QueryHookOptions<GetProductsInUserCartQuery, GetProductsInUserCartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductsInUserCartQuery, GetProductsInUserCartQueryVariables>(GetProductsInUserCartDocument, options);
+      }
+export function useGetProductsInUserCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductsInUserCartQuery, GetProductsInUserCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductsInUserCartQuery, GetProductsInUserCartQueryVariables>(GetProductsInUserCartDocument, options);
+        }
+export type GetProductsInUserCartQueryHookResult = ReturnType<typeof useGetProductsInUserCartQuery>;
+export type GetProductsInUserCartLazyQueryHookResult = ReturnType<typeof useGetProductsInUserCartLazyQuery>;
+export type GetProductsInUserCartQueryResult = Apollo.QueryResult<GetProductsInUserCartQuery, GetProductsInUserCartQueryVariables>;
+export const PublishCartItemDocument = gql`
+    mutation PublishCartItem($id: ID!) {
+  publishCartItem(where: {id: $id}) {
+    cart {
+      id
+    }
+  }
+}
+    `;
+export type PublishCartItemMutationFn = Apollo.MutationFunction<PublishCartItemMutation, PublishCartItemMutationVariables>;
+
+/**
+ * __usePublishCartItemMutation__
+ *
+ * To run a mutation, you first call `usePublishCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishCartItemMutation, { data, loading, error }] = usePublishCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishCartItemMutation(baseOptions?: Apollo.MutationHookOptions<PublishCartItemMutation, PublishCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishCartItemMutation, PublishCartItemMutationVariables>(PublishCartItemDocument, options);
+      }
+export type PublishCartItemMutationHookResult = ReturnType<typeof usePublishCartItemMutation>;
+export type PublishCartItemMutationResult = Apollo.MutationResult<PublishCartItemMutation>;
+export type PublishCartItemMutationOptions = Apollo.BaseMutationOptions<PublishCartItemMutation, PublishCartItemMutationVariables>;
+export const PublishCartDocument = gql`
+    mutation PublishCart($id: ID!) {
+  publishCart(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type PublishCartMutationFn = Apollo.MutationFunction<PublishCartMutation, PublishCartMutationVariables>;
+
+/**
+ * __usePublishCartMutation__
+ *
+ * To run a mutation, you first call `usePublishCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishCartMutation, { data, loading, error }] = usePublishCartMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishCartMutation(baseOptions?: Apollo.MutationHookOptions<PublishCartMutation, PublishCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishCartMutation, PublishCartMutationVariables>(PublishCartDocument, options);
+      }
+export type PublishCartMutationHookResult = ReturnType<typeof usePublishCartMutation>;
+export type PublishCartMutationResult = Apollo.MutationResult<PublishCartMutation>;
+export type PublishCartMutationOptions = Apollo.BaseMutationOptions<PublishCartMutation, PublishCartMutationVariables>;
+export const CountCartTotalPriceDocument = gql`
+    mutation CountCartTotalPrice($email: String!, $value: Int!) {
+  updateCart(where: {exmail: $email}, data: {totalPrice: $value}) {
+    totalPrice
+  }
+  publishCart(where: {exmail: $email}) {
+    id
+  }
+}
+    `;
+export type CountCartTotalPriceMutationFn = Apollo.MutationFunction<CountCartTotalPriceMutation, CountCartTotalPriceMutationVariables>;
+
+/**
+ * __useCountCartTotalPriceMutation__
+ *
+ * To run a mutation, you first call `useCountCartTotalPriceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCountCartTotalPriceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [countCartTotalPriceMutation, { data, loading, error }] = useCountCartTotalPriceMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useCountCartTotalPriceMutation(baseOptions?: Apollo.MutationHookOptions<CountCartTotalPriceMutation, CountCartTotalPriceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CountCartTotalPriceMutation, CountCartTotalPriceMutationVariables>(CountCartTotalPriceDocument, options);
+      }
+export type CountCartTotalPriceMutationHookResult = ReturnType<typeof useCountCartTotalPriceMutation>;
+export type CountCartTotalPriceMutationResult = Apollo.MutationResult<CountCartTotalPriceMutation>;
+export type CountCartTotalPriceMutationOptions = Apollo.BaseMutationOptions<CountCartTotalPriceMutation, CountCartTotalPriceMutationVariables>;

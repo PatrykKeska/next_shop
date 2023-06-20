@@ -1,0 +1,26 @@
+query GetProductsInUserCart($email: String!) {
+  cart(where: { exmail: $email }) {
+    totalPrice
+    cartItems {
+      id
+      quantity
+      product {
+        id
+        name
+        price
+        slug
+        variants {
+          ... on ProductSizeColorVariant {
+            id
+            name
+            size
+            color
+          }
+        }
+        images {
+          url
+        }
+      }
+    }
+  }
+}

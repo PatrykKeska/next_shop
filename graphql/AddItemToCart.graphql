@@ -1,0 +1,18 @@
+mutation CreateCartItem($data: CartItemCreateInput!) {
+  createCartItem(data: $data) {
+    id
+    quantity
+    cart {
+      id
+    }
+    product {
+      id
+      name
+      slug
+      price
+      images {
+        url
+      }
+    }
+  }
+}

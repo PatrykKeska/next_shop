@@ -1,0 +1,5 @@
+mutation PublishCart($id: ID!) {
+  publishCart(where: { id: $id }) {
+    id
+  }
+}

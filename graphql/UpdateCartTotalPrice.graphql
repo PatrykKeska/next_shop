@@ -1,0 +1,9 @@
+mutation CountCartTotalPrice($email: String!, $value: Int!) {
+  updateCart(where: { exmail: $email }, data: { totalPrice: $value }) {
+    totalPrice
+  }
+
+  publishCart(where: { exmail: $email }) {
+    id
+  }
+}
