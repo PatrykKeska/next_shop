@@ -56,7 +56,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
               name: product.product.data.product!.name,
               images: [product.product.data.product!.images[0].url],
               metadata: {
-                slug: product.product.data.product!.slug,
+                id: product.product.data.product!.slug,
               },
             },
             unit_amount: product.product.data.product!.price,
