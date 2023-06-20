@@ -64,9 +64,10 @@ export const ProductListItem = ({ data }: ProductDetails) => {
         </div>
       </Link>
       <button
-        onClick={() =>
-          addItemToCart({ name, price, count: 1, id, image: images[0].url })
-        }
+        //TODO: handle adding to cart
+        // onClick={() =>
+        //   addItemToCart({ name, price, count: 1, id, image: images[0].url })
+        // }
         className='block w-56 max-w-xs rounded bg-yellow-400 p-4 text-sm mt-4 font-medium transition hover:scale-105'
       >
         Add to Cart

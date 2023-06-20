@@ -184,15 +184,16 @@ export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
 
               <button
                 type='button'
-                onClick={() =>
-                  addItemToCart({
-                    id: slug,
-                    name,
-                    price,
-                    count: 1,
-                    image: images[0].url,
-                  })
-                }
+                //TODO: handle adding to cart
+                // onClick={() =>
+                //   addItemToCart({
+                //     id: slug,
+                //     name,
+                //     price,
+                //     count: 1,
+                //     image: images[0].url,
+                //   })
+                // }
                 className='w-full rounded bg-yellow-400 px-6 py-3 text-sm font-bold uppercase tracking-wide text-black'
               >
                 Add to cart
