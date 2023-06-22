@@ -1,0 +1,8 @@
+mutation removeProductFromCart($id: ID!, $email: String!) {
+  deleteCartItem(where: { id: $id }) {
+    id
+  }
+  publishCart(where: { exmail: $email }) {
+    id
+  }
+}

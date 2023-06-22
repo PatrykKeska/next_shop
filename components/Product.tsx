@@ -1,14 +1,13 @@
-import { MarkdownResult } from "@/utils/types/MarkdownResult";
 import Image from "next/image";
-import { useCartState } from "./Cart/CartContext";
 import { MarkdownReact } from "./MarkdownReact";
 import { GetProductDetailsBySlugQuery } from "@/graphql/generated/graphql";
 import { ReviewLayout } from "./ReviewLayout/ReviewLayout";
+import { useAddItemToCart } from "./hooks/useAddItemToCart";
 
 export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
-  const { addItemToCart } = useCartState();
   if (!product) return null;
   const { slug, description, name, images, price, variants } = product;
+  const { addItemToCart } = useAddItemToCart(slug);
   return (
     <section>
       <div key={slug} className='relative mx-auto max-w-screen-xl px-4 py-8'>
@@ -184,16 +183,7 @@ export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
 
               <button
                 type='button'
-                //TODO: handle adding to cart
-                // onClick={() =>
-                //   addItemToCart({
-                //     id: slug,
-                //     name,
-                //     price,
-                //     count: 1,
-                //     image: images[0].url,
-                //   })
-                // }
+                onClick={addItemToCart}
                 className='w-full rounded bg-yellow-400 px-6 py-3 text-sm font-bold uppercase tracking-wide text-black'
               >
                 Add to cart

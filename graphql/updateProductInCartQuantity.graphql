@@ -1,0 +1,8 @@
+mutation updateProductInCartQuantity($id: ID!, $quantity: Int!) {
+  updateCartItem(where: { id: $id }, data: { quantity: $quantity }) {
+    id
+  }
+  publishCartItem(where: { id: $id }) {
+    id
+  }
+}

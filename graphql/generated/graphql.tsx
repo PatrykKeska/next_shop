@@ -13214,6 +13214,14 @@ export type IsExmailExistQueryVariables = Exact<{
 
 export type IsExmailExistQuery = { __typename?: 'Query', draftAccount?: { __typename?: 'Account', id: string, email: string, stage: Stage } | null, publishedAccount?: { __typename?: 'Account', id: string, email: string, stage: Stage } | null };
 
+export type IsProductExistInCartQueryVariables = Exact<{
+  email: Scalars['String'];
+  slug: Scalars['String'];
+}>;
+
+
+export type IsProductExistInCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, cartItems: Array<{ __typename?: 'CartItem', id: string, quantity: number }> } | null };
+
 export type GetProductBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
@@ -13275,6 +13283,29 @@ export type CountCartTotalPriceMutationVariables = Exact<{
 
 
 export type CountCartTotalPriceMutation = { __typename?: 'Mutation', updateCart?: { __typename?: 'Cart', totalPrice?: number | null } | null, publishCart?: { __typename?: 'Cart', id: string } | null };
+
+export type IsProductExistQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type IsProductExistQuery = { __typename?: 'Query', product?: { __typename?: 'Product', slug: string, id: string } | null };
+
+export type RemoveProductFromCartMutationVariables = Exact<{
+  id: Scalars['ID'];
+  email: Scalars['String'];
+}>;
+
+
+export type RemoveProductFromCartMutation = { __typename?: 'Mutation', deleteCartItem?: { __typename?: 'CartItem', id: string } | null, publishCart?: { __typename?: 'Cart', id: string } | null };
+
+export type UpdateProductInCartQuantityMutationVariables = Exact<{
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type UpdateProductInCartQuantityMutation = { __typename?: 'Mutation', updateCartItem?: { __typename?: 'CartItem', id: string } | null, publishCartItem?: { __typename?: 'CartItem', id: string } | null };
 
 export const ReviewContentFragmentDoc = gql`
     fragment reviewContent on Review {
@@ -13517,6 +13548,46 @@ export function useIsExmailExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type IsExmailExistQueryHookResult = ReturnType<typeof useIsExmailExistQuery>;
 export type IsExmailExistLazyQueryHookResult = ReturnType<typeof useIsExmailExistLazyQuery>;
 export type IsExmailExistQueryResult = Apollo.QueryResult<IsExmailExistQuery, IsExmailExistQueryVariables>;
+export const IsProductExistInCartDocument = gql`
+    query IsProductExistInCart($email: String!, $slug: String!) {
+  cart(where: {exmail: $email}) {
+    id
+    cartItems(where: {product: {slug: $slug}}) {
+      id
+      quantity
+    }
+  }
+}
+    `;
+
+/**
+ * __useIsProductExistInCartQuery__
+ *
+ * To run a query within a React component, call `useIsProductExistInCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsProductExistInCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsProductExistInCartQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useIsProductExistInCartQuery(baseOptions: Apollo.QueryHookOptions<IsProductExistInCartQuery, IsProductExistInCartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsProductExistInCartQuery, IsProductExistInCartQueryVariables>(IsProductExistInCartDocument, options);
+      }
+export function useIsProductExistInCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsProductExistInCartQuery, IsProductExistInCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsProductExistInCartQuery, IsProductExistInCartQueryVariables>(IsProductExistInCartDocument, options);
+        }
+export type IsProductExistInCartQueryHookResult = ReturnType<typeof useIsProductExistInCartQuery>;
+export type IsProductExistInCartLazyQueryHookResult = ReturnType<typeof useIsProductExistInCartLazyQuery>;
+export type IsProductExistInCartQueryResult = Apollo.QueryResult<IsProductExistInCartQuery, IsProductExistInCartQueryVariables>;
 export const GetProductBySlugDocument = gql`
     query GetProductBySlug($slug: String!) {
   product(where: {slug: $slug}) {
@@ -13879,3 +13950,113 @@ export function useCountCartTotalPriceMutation(baseOptions?: Apollo.MutationHook
 export type CountCartTotalPriceMutationHookResult = ReturnType<typeof useCountCartTotalPriceMutation>;
 export type CountCartTotalPriceMutationResult = Apollo.MutationResult<CountCartTotalPriceMutation>;
 export type CountCartTotalPriceMutationOptions = Apollo.BaseMutationOptions<CountCartTotalPriceMutation, CountCartTotalPriceMutationVariables>;
+export const IsProductExistDocument = gql`
+    query IsProductExist($slug: String!) {
+  product(where: {slug: $slug}) {
+    slug
+    id
+  }
+}
+    `;
+
+/**
+ * __useIsProductExistQuery__
+ *
+ * To run a query within a React component, call `useIsProductExistQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsProductExistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsProductExistQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useIsProductExistQuery(baseOptions: Apollo.QueryHookOptions<IsProductExistQuery, IsProductExistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsProductExistQuery, IsProductExistQueryVariables>(IsProductExistDocument, options);
+      }
+export function useIsProductExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsProductExistQuery, IsProductExistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsProductExistQuery, IsProductExistQueryVariables>(IsProductExistDocument, options);
+        }
+export type IsProductExistQueryHookResult = ReturnType<typeof useIsProductExistQuery>;
+export type IsProductExistLazyQueryHookResult = ReturnType<typeof useIsProductExistLazyQuery>;
+export type IsProductExistQueryResult = Apollo.QueryResult<IsProductExistQuery, IsProductExistQueryVariables>;
+export const RemoveProductFromCartDocument = gql`
+    mutation removeProductFromCart($id: ID!, $email: String!) {
+  deleteCartItem(where: {id: $id}) {
+    id
+  }
+  publishCart(where: {exmail: $email}) {
+    id
+  }
+}
+    `;
+export type RemoveProductFromCartMutationFn = Apollo.MutationFunction<RemoveProductFromCartMutation, RemoveProductFromCartMutationVariables>;
+
+/**
+ * __useRemoveProductFromCartMutation__
+ *
+ * To run a mutation, you first call `useRemoveProductFromCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveProductFromCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeProductFromCartMutation, { data, loading, error }] = useRemoveProductFromCartMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useRemoveProductFromCartMutation(baseOptions?: Apollo.MutationHookOptions<RemoveProductFromCartMutation, RemoveProductFromCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveProductFromCartMutation, RemoveProductFromCartMutationVariables>(RemoveProductFromCartDocument, options);
+      }
+export type RemoveProductFromCartMutationHookResult = ReturnType<typeof useRemoveProductFromCartMutation>;
+export type RemoveProductFromCartMutationResult = Apollo.MutationResult<RemoveProductFromCartMutation>;
+export type RemoveProductFromCartMutationOptions = Apollo.BaseMutationOptions<RemoveProductFromCartMutation, RemoveProductFromCartMutationVariables>;
+export const UpdateProductInCartQuantityDocument = gql`
+    mutation updateProductInCartQuantity($id: ID!, $quantity: Int!) {
+  updateCartItem(where: {id: $id}, data: {quantity: $quantity}) {
+    id
+  }
+  publishCartItem(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type UpdateProductInCartQuantityMutationFn = Apollo.MutationFunction<UpdateProductInCartQuantityMutation, UpdateProductInCartQuantityMutationVariables>;
+
+/**
+ * __useUpdateProductInCartQuantityMutation__
+ *
+ * To run a mutation, you first call `useUpdateProductInCartQuantityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProductInCartQuantityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProductInCartQuantityMutation, { data, loading, error }] = useUpdateProductInCartQuantityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      quantity: // value for 'quantity'
+ *   },
+ * });
+ */
+export function useUpdateProductInCartQuantityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductInCartQuantityMutation, UpdateProductInCartQuantityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProductInCartQuantityMutation, UpdateProductInCartQuantityMutationVariables>(UpdateProductInCartQuantityDocument, options);
+      }
+export type UpdateProductInCartQuantityMutationHookResult = ReturnType<typeof useUpdateProductInCartQuantityMutation>;
+export type UpdateProductInCartQuantityMutationResult = Apollo.MutationResult<UpdateProductInCartQuantityMutation>;
+export type UpdateProductInCartQuantityMutationOptions = Apollo.BaseMutationOptions<UpdateProductInCartQuantityMutation, UpdateProductInCartQuantityMutationVariables>;

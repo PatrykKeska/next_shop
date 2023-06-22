@@ -1,0 +1,9 @@
+query IsProductExistInCart($email: String!, $slug: String!) {
+  cart(where: { exmail: $email }) {
+    id
+    cartItems(where: { product: { slug: $slug } }) {
+      id
+      quantity
+    }
+  }
+}

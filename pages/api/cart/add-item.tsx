@@ -1,89 +1,36 @@
-import { authorizatedApolloClient } from "@/graphql/apolloClient";
-import {
-  CountCartTotalPriceDocument,
-  CountCartTotalPriceMutation,
-  CountCartTotalPriceMutationVariables,
-  CreateCartItemDocument,
-  CreateCartItemMutation,
-  CreateCartItemMutationVariables,
-  GetProductsInUserCartDocument,
-  GetProductsInUserCartQuery,
-  GetProductsInUserCartQueryVariables,
-  PublishCartItemDocument,
-  PublishCartItemMutation,
-  PublishCartItemMutationVariables,
-} from "@/graphql/generated/graphql";
 import { AddCartItemType } from "@/utils/types/Cart";
 import { NextApiHandler } from "next";
+import { updateExistingProductQuantity } from "./updateExistingProductQuantity";
+import { addNewProductToCart } from "./addNewProductToCart";
+import { isProductExist } from "./isProductExist";
+import { isSessionExist } from "../auth/isSessionExist";
 
 const AddItem: NextApiHandler = async (req, res) => {
   const { email, slug, quantity } = req.body as AddCartItemType;
-  try {
-    const addedProduct = await authorizatedApolloClient.mutate<
-      CreateCartItemMutation,
-      CreateCartItemMutationVariables
-    >({
-      mutation: CreateCartItemDocument,
-      variables: {
-        data: {
-          cart: { connect: { exmail: email } },
-          quantity: quantity,
-          product: { connect: { slug: slug } },
-        },
-      },
-    });
-    try {
-      if (!addedProduct.data?.createCartItem?.id) {
-        throw new Error("The product was not added to the cart");
+  const isUserSessionExist = await isSessionExist(req, res);
+  // if (!isUserSessionExist) {
+  //   return res.status(401).json({ message: "User session not found" });
+  // } else {
+  const isProductExistInDatabase = await isProductExist(slug);
+  if (isProductExistInDatabase) {
+    const updateExistingProduct = await updateExistingProductQuantity(
+      email,
+      slug,
+      "+"
+    );
+    if (updateExistingProduct) {
+      return res.status(200).json({ message: "Product quantity updated" });
+    } else if (!updateExistingProduct) {
+      const addNewProduct = await addNewProductToCart(email, slug, quantity);
+      if (addNewProduct) {
+        return res.status(200).json({ message: "Product added to cart" });
+      } else {
+        return res.status(400).json({ message: "Something went wrong" });
       }
-      const publishedProduct = await authorizatedApolloClient.mutate<
-        PublishCartItemMutation,
-        PublishCartItemMutationVariables
-      >({
-        mutation: PublishCartItemDocument,
-        variables: {
-          id: addedProduct.data?.createCartItem?.id,
-        },
-      });
-      if (publishedProduct.data?.publishCartItem?.cart?.id) {
-        const currentCartItems = await authorizatedApolloClient.query<
-          GetProductsInUserCartQuery,
-          GetProductsInUserCartQueryVariables
-        >({
-          query: GetProductsInUserCartDocument,
-          variables: {
-            email: email,
-          },
-        });
-        const currTotalPrice = [] as number[];
-        await currentCartItems.data?.cart?.cartItems?.map(async (item) => {
-          if (!item.product) return null;
-          const totalPriceOfEachItem = item.quantity * item.product.price;
-          currTotalPrice.push(totalPriceOfEachItem);
-        });
-        const totalPrice = currTotalPrice.reduce((a, b) => a + b, 0);
-
-        await authorizatedApolloClient.mutate<
-          CountCartTotalPriceMutation,
-          CountCartTotalPriceMutationVariables
-        >({
-          mutation: CountCartTotalPriceDocument,
-          variables: {
-            email: email,
-            value: totalPrice,
-          },
-        });
-      }
-
-      res.json({ message: "Product added to cart!" });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ error, message: "Cant publish product in cart!" });
     }
-  } catch (error) {
-    return res.status(500).json({ error, message: "Something went wrong!" });
+  } else {
+    return res.status(400).json({ message: "Product not found" });
   }
 };
-
+// };
 export default AddItem;

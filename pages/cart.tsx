@@ -6,12 +6,14 @@ import { useRouter } from "next/router";
 import { useModalsState } from "@/components/Modals/ModalsContext";
 import { useUpdateCart } from "@/components/Cart/CartHandler";
 import { payForItems } from "@/components/Cart/hook/usePayForItems";
+import { useRemoveItemFromCart } from "@/components/hooks/useRemoveItemFromCart";
 
 export const CartPage = () => {
   useModalsState();
   const router = useRouter();
   const session = useSession();
   const { data, isError, isLoading, totalPrice } = useUpdateCart();
+  const { RemoveItemFromCart } = useRemoveItemFromCart();
   return (
     <section>
       {/* {isLoading && (
@@ -78,6 +80,7 @@ export const CartPage = () => {
                       </div>
 
                       <button
+                        onClick={() => RemoveItemFromCart(item.product?.slug!)}
                         // onClick={() => removeItemFromCart(item.id)}
                         className='text-gray-600 transition hover:text-red-600'
                       >
