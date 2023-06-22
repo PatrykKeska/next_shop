@@ -38,6 +38,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
       }),
     });
     const { cartItems } = await res.json();
+    // setTotalItems(cartItems.data.cart.totalItems);
     return cartItems.data.cart.cartItems;
   };
 
@@ -47,18 +48,11 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     queryKey: ["cartItems"],
     queryFn: getCartItems,
     refetchOnMount: "always",
+    onSuccess: () => {
+      setCartItems(data!);
+      setItemToLocalStorage(data!);
+    },
   });
-
-  useEffect(() => {
-    query.fetchQuery<CartItem[]>({
-      queryKey: ["cartItems"],
-      queryFn: getCartItems,
-    });
-  }, [session]);
-
-  const updateCart = useCallback(async () => {
-    return await getCartItems();
-  }, [cartItems]);
 
   useEffect(() => {});
   // const countTotalPrice = useCallback(() => {
@@ -86,13 +80,6 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     },
     [cartItems]
   );
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await updateCart();
-  //     // setCartItems(res?.cartItems);
-  //   })();
-  // }, []);
 
   // useEffect(() => {
   //   (async () => {

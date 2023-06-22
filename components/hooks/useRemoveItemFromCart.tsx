@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 export const useRemoveItemFromCart = () => {
   const session = useSession();
-
+  const query = useQueryClient();
   const removeItemFn = async (slug: string) => {
     const res = await fetch("/api/cart/remove-item", {
       headers: { "Content-Type": "application/json" },
@@ -21,6 +21,7 @@ export const useRemoveItemFromCart = () => {
 
   const RemoveItemFromCart = async (slug: string) => {
     mutation.mutate(slug);
+    query.invalidateQueries({ queryKey: ["cartItems"] });
   };
   return { RemoveItemFromCart };
 };

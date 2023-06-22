@@ -7,7 +7,7 @@ export const useUpdateCart = () => {
   const session = useSession();
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-
+  const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const countTotalItems = (data: CartItem[]) => {
     const values = data?.map((item) => item.quantity);
     const total = values?.reduce((a, b) => a + b, 0);
@@ -40,18 +40,23 @@ export const useUpdateCart = () => {
     queryKey: ["cartItems"],
     queryFn: getCartItems,
     refetchOnMount: "always",
+    onSuccess: (data) => {
+      setCartItems(data);
+    },
   });
 
   useEffect(() => {
+    console.log("refetched");
     query.fetchQuery<CartItem[]>({
       queryKey: ["cartItems"],
       queryFn: getCartItems,
     });
-  }, [session]);
+  }, [session, data]);
 
   useEffect(() => {
     countTotalItems(data!);
     countTotalPrice(data!);
+    getCartItems();
   }, [data, totalPrice]);
 
   return { data, isLoading, isError, totalPrice, totalItems };

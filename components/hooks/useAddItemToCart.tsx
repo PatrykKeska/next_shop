@@ -13,7 +13,7 @@ export const useAddItemToCart = (slug: string) => {
         quantity: 1,
       }),
     });
-    return await res.json();
+    return res.json();
   };
 
   const mutation = useMutation({

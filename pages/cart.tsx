@@ -12,7 +12,7 @@ export const CartPage = () => {
   useModalsState();
   const router = useRouter();
   const session = useSession();
-  const { data, isError, isLoading, totalPrice } = useUpdateCart();
+  // const { data, isError, isLoading, totalPrice } = useUpdateCart();
   const { RemoveItemFromCart } = useRemoveItemFromCart();
   return (
     <section>
@@ -80,8 +80,9 @@ export const CartPage = () => {
                       </div>
 
                       <button
-                        onClick={() => RemoveItemFromCart(item.product?.slug!)}
-                        // onClick={() => removeItemFromCart(item.id)}
+                        onClick={async () =>
+                          await RemoveItemFromCart(item.product?.slug!)
+                        }
                         className='text-gray-600 transition hover:text-red-600'
                       >
                         <span className='sr-only'>Remove item</span>
@@ -106,7 +107,6 @@ export const CartPage = () => {
                 );
               })}
             </ul>
-
             <div className='mt-8 flex justify-end border-t border-gray-100 pt-8'>
               <div className='w-screen max-w-lg space-y-4'>
                 <dl className='space-y-0.5 text-sm text-gray-700'>

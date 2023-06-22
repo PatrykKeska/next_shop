@@ -5,9 +5,10 @@ import { ReviewLayout } from "./ReviewLayout/ReviewLayout";
 import { useAddItemToCart } from "./hooks/useAddItemToCart";
 
 export const ProductDetails = ({ product }: GetProductDetailsBySlugQuery) => {
+  const { addItemToCart } = useAddItemToCart(product!.slug);
+
   if (!product) return null;
   const { slug, description, name, images, price, variants } = product;
-  const { addItemToCart } = useAddItemToCart(slug);
   return (
     <section>
       <div key={slug} className='relative mx-auto max-w-screen-xl px-4 py-8'>
