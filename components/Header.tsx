@@ -4,9 +4,9 @@ import { Transition } from "@headlessui/react";
 import { SideMenuLayout } from "./SideMenu/SideMenuLayout";
 import { BurgerIcon } from "./assets/icons/BurgerIcon";
 import { CloseIcon } from "./assets/icons/CloseIcon";
-import { useUpdateCart } from "./Cart/CartHandler";
+import { useCartState } from "./Cart/CartContext";
 export const Header = () => {
-  const { totalItems } = useUpdateCart();
+  const { totalItems } = useCartState();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleMenuOpen = (arg: boolean) => {
     setIsMenuOpen(arg);

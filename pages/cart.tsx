@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useModalsState } from "@/components/Modals/ModalsContext";
-import { useUpdateCart } from "@/components/Cart/CartHandler";
 import { payForItems } from "@/components/Cart/hook/usePayForItems";
 import { useRemoveItemFromCart } from "@/components/hooks/useRemoveItemFromCart";
 
@@ -12,21 +11,11 @@ export const CartPage = () => {
   useModalsState();
   const router = useRouter();
   const session = useSession();
-  // const { data, isError, isLoading, totalPrice } = useUpdateCart();
+  ``;
+  const { items, totalPrice } = useCartState();
   const { RemoveItemFromCart } = useRemoveItemFromCart();
   return (
     <section>
-      {/* {isLoading && (
-        <p className='text-2xl text-green-500 animate-bounce fixed top-1/3 right-1/2 -translate-x-1/2'>
-          Loading...
-        </p>
-      )}
-      {isError && (
-        <p className='text-2xl text-red-500 animate-bounce fixed top-1/3 right-1/2 -translate-x-1/2'>
-          Loading...
-        </p>
-      )} */}
-
       <div className='mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8'>
         <div className='mx-auto max-w-3xl'>
           <header className='text-center'>
@@ -39,7 +28,7 @@ export const CartPage = () => {
 
           <div className='mt-8'>
             <ul className='space-y-4'>
-              {data?.map((item) => {
+              {items?.map((item) => {
                 return (
                   <li key={item?.id} className='flex items-center gap-4'>
                     <Image
@@ -144,7 +133,7 @@ export const CartPage = () => {
                     <button
                       className='block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600'
                       onClick={async () =>
-                        await payForItems(session, data!, router)
+                        await payForItems(session, items!, router)
                       }
                     >
                       checkout

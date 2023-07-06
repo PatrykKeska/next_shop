@@ -10,6 +10,7 @@ import { getItemsFromLocalStorage, setItemToLocalStorage } from "./CartModel";
 import { useSession } from "next-auth/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CartItem } from "@/graphql/generated/graphql";
+import { count } from "console";
 
 export interface CartState {
   items: CartItem[];
@@ -38,13 +39,13 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
       }),
     });
     const { cartItems } = await res.json();
-    // setTotalItems(cartItems.data.cart.totalItems);
+    setTotalItems(cartItems.data.cart.totalItems);
     return cartItems.data.cart.cartItems;
   };
 
   const query = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery<CartItem[]>({
+  const { data, isLoading, isError, isFetched } = useQuery<CartItem[]>({
     queryKey: ["cartItems"],
     queryFn: getCartItems,
     refetchOnMount: "always",
@@ -81,16 +82,19 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     [cartItems]
   );
 
+  useEffect(() => {
+    if (isFetched) {
+      countTotalItems();
+    }
+  }, [isFetched]);
   // useEffect(() => {
   //   (async () => {
   //     if (isLoaded) {
   //       setLoading(false);
   //       return;
   //     }
-  //     const res = await updateCart();
-  //     setCartItems(res?.cartItems);
-  //     // countTotalPrice();
-  //     // countTotalItems();
+  //     countTotalPrice();
+  //     countTotalItems();
   //   })();
   // }, [cartItems, isLoaded, countTotalItems]);
 
